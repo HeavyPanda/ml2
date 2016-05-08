@@ -1,0 +1,51 @@
+\documentclass[a4paper]{article}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\pagestyle{plain}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usepackage{eurosym}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{dlfltxbcodetips}
+
+\begin{document}
+\section*{Exercise 1a}
+\begin{align*}
+\frac{\partial C}{\partial q_i}
+&=\frac{\partial}{\partial q_i}\sum_{j}p_j\log(\frac{p_j}{q_j})\\
+&=\sum_{j}\frac{\partial}{\partial q_i}\left(p_j\log(\frac{p_j}{q_j})\right)\\
+&=\sum_{j}\frac{\partial}{\partial q_i}\left(p_j\log(p_j)-p_jlog(q_j)\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial q_i}log(q_j)\right)\\
+\end{align*}
+Since \[ \frac{\partial}{\partial q_i}log(q_j)=\begin{cases}
+   0 &, i\neq j \\
+   \frac{1}{q_i} &, i=j\end{cases},  \]
+\begin{align*}
+\frac{\partial C}{\partial q_i}
+&=-\frac{p_i}{q_i}.\\
+\end{align*}
+\section*{Exercise 1b}
+\begin{align*}
+\frac{\partial C}{\partial x_i}
+&=\frac{\partial}{\partial x_i}\sum_{j}p_j\log(\frac{p_j}{q_j})\\
+&=\sum_{j}\frac{\partial}{\partial x_i}\left(p_j\log(p_j)-p_jlog(q_j)\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}log(q_j)\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}log(\frac{e^{x_j}}{\sum_{k}e^{x_k}})\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}(x_j-log(\sum_{k}e^{x_k}))\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}x_j\right)+\sum_{j}\left(p_j\frac{\partial}{\partial x_i}log(\sum_{k}e^{x_k})\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}x_j\right)+\sum_{j}\left(p_j\frac{1}{\sum_{k}e^{x_k}}\frac{\partial}{\partial x_i}\sum_{k}e^{x_k}\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}x_j\right)+\sum_{j}\left(p_j\frac{e^{x_i}}{\sum_{k}e^{x_k}}\right)\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}x_j\right)+q_i\sum_{j}p_j\\
+&=\sum_{j}\left(-p_j\frac{\partial}{\partial x_i}x_j\right)+q_i\\
+\end{align*}
+Since \[ \frac{\partial}{\partial x_i}x_j=\begin{cases}
+   0 &, i\neq j \\
+   1 &, i=j\end{cases},  \]
+\begin{align*}
+\frac{\partial C}{\partial x_i}
+&=-p_i+q_i\\
+\end{align*}
+\end{document}
