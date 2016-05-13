@@ -88,19 +88,31 @@
 \newcommand{\invk}[1]{{(#1)^{-1}}}
 \newcommand{\tin}[1]{{(#1^\top)^{-1}}}
 
-\newcommand{\Xt}{\X^\top}
-\newcommand{\xt}{\x^\top}
-\newcommand{\yt}{\y^\top}
-\newcommand{\wt}{\w^\top}
+\newcommand{\Yt}{{Y^\top}}
+\newcommand{\Xt}{{X^\top}}
+\newcommand{\xt}{{\x^\top}}
+\newcommand{\yt}{{\y^\top}}
+\newcommand{\wt}{{\w^\top}}
 \newcommand{\w}{w}
-\newcommand{\1}{\mathds{1}}
+\newcommand{\lx}{{\lambda_{x}}}
+\newcommand{\ly}{{\lambda_{y}}}
+\newcommand{\ax}{{\alpha_{x}}}
+\newcommand{\ay}{{\alpha_{y}}}
 
+\newcommand{\axt}{\alpha_{x}^\top}
+\newcommand{\ayt}{\alpha_{y}^\top}
+\newcommand{\Cxx}{C_{xx}}
+\newcommand{\Cxy}{C_{xy}}
+\newcommand{\Cyx}{C_{yx}}
+\newcommand{\Cyy}{C_{yy}}
+\newcommand{\1}{\mathds{1}}
+\newcommand{\lag}{\mathcal{L}}
 
 
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 1}}
+\title{\b{Exercise Sheet 3}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
@@ -110,53 +122,104 @@ Sascha Huk, 321249;\quad Viktor Jeney, 348969;\quad Mario Tambos, ??????;\quad J
 
 
  
-\extitle{Exercise 2}
-(i) We have to prove $\wt C\w \eqs{?} \epsilon \eqs{(3)} |x-\sum_jw_j\eta_j|^2	$. \\
-\begin{gather*}
-	\wt C\w
-	\\ 
-	= \wt (\1_kx^\top - \eta)(\1_kx^\top - \eta)^\top\w 
+\extitle{Exercise 1}
+(a)
+For data-span constructed $w_x = X\ax$ and $w_y = Y\ay$ the primal problem is:  
+%\begin{align*}
+%	\argmax_{\ax,\ay} (X\ax)^\top C_{xy} Y\ay \\
+%	\text{s.t. } (X\ax)^\top C_{xx} X\ax - 1 &= 0 \\
+%	 (Y\ay)^\top C_{yy} Y\ay - 1 &= 0
+%\end{align*}
+\begin{align*}
+	\max_{\ax,\ay} \ax^\top X^\top C_{xy} Y\ay \\
+	\text{s.t. } \ax^\top X^\top C_{xx} X\ax - 1 &= 0 \\
+	 \ay^\top Y^\top C_{yy} Y\ay - 1 &= 0
+\end{align*}
+Lagrangian (the factor 1/2 is introduced just for convenience):
+\begin{align*}
+	\mathcal{L}=\axt\Xt\Cxy Y\ay - {1\over 2}\lx(\axt\Xt\Cxx X\ax - 1)
+	- {1\over 2}\ly(\ayt\Yt\Cyy Y\ay - 1)
+\end{align*}
+Partial derivatives:
+\begin{align*}
+	{\partial\lag\over\partial\axt} = \Xt\Cxy Y\ay - \lx\Xt\Cxx X\ax \eqq 0
+	\quad\quad ,&\quad\quad
+	{\partial\lag\over\partial\ayt} = \Yt\Cyx X\ax - \ly\Yt\Cyy Y\ay \eqq 0
+\end{align*}
+We now multiply with $\axt$, $\ayt$
+\begin{align*}
+	\axt\Xt\Cxy Y\ay = \lx\axt\Xt\Cxx X\ax
+	\quad\quad ,&\quad\quad
+	\ayt\Yt\Cyx X\ax = \ly\ayt\Yt\Cyy Y\ay
 	\\
-	= \wt (\1_kx^\top - \eta)(x\1_k^\top - \eta^\top)\w 
-	\\	
-	= \wt\1_kx^\top x\1_k^\top\w - \wt\1_kx^\top \eta^\top\w
-	  - \wt\eta x\1_k^\top\w +\wt\eta \eta^\top\w
-	\\
-	= (\wt\1_kx^\top)(x\1_k^\top\w) - 2(\wt\1_kx^\top)(\eta^\top\w) + (\wt\eta)(\eta^\top\w)
-	\\
-	= |(\wt\1_kx^\top) - (\wt\eta)|^2
-	\\
-	= |\wt(\1_kx^\top - \eta)|^2
-	\\
-	= |\sum_jw_j(x - \eta_j)|^2	
-\end{gather*}
-Since $\sum_iw_i=1$ we find $\sum_iw_ix=x$, which leads to the desired result.\qed
+	\Longrightarrow
+	\axt\Xt\Cxy Y\ay = \lx\axt\Xt\Cxx X\ax
+	\quad\quad ,&\quad\quad
+	\axt\Xt\Cxy Y\ay = \ly\ayt\Yt\Cyy Y\ay	
+\end{align*}
+From the auto-cov constraints follows
+\begin{align*}
+	&\axt\Xt\Cxy Y\ay = \lx\underbrace{\axt\Xt\Cxx X\ax}_{=1} 
+	= \ly\underbrace{\ayt\Yt\Cyy Y\ay}_{=1}
+	\quad \Longrightarrow \quad \lx = \ly
+\end{align*}
+Now the derivatives can be rewritten as follows:
+\begin{align*}
+	\Xt\Cxy Y\ay \eqq \lx\Xt\Cxx X\ax 
+	\quad\quad ,&\quad\quad
+	\Yt\Cyx X\ax \eqq \lx\Yt\Cyy Y\ay
+\end{align*} 
+(b+c) The same in blockmatrix form:
+\begin{align*}
+	\begin{bmatrix}
+	0 & \Xt\Cxy Y  \\
+	\Yt\Cyx X & 0 
+	\end{bmatrix}
+	\begin{bmatrix}
+	 \ax  \\
+	 \ay
+	\end{bmatrix}
+\eqq	 
+	 \lx		
+	\begin{bmatrix}
+	\Xt\Cxx X & 0 \\
+	0 & \Yt\Cyy Y  
+	\end{bmatrix}
+	\begin{bmatrix}
+	 \ax  \\
+	 \ay
+	\end{bmatrix}
 \\
-\\
-We now perform Lagrange optimization:  
-\begin{gather*}
-	\Lambda(w,\lambda) = \wt Cw - \lambda(\wt\mathds{1}_k - 1)
-	\\
-	{\partial\Lambda \over \partial w} = 2C\w - \lambda\1_k \eqq 0 
-	\quad\Longrightarrow\quad 
-	2C\w = \lambda\1_k
-	\quad\Longrightarrow\quad
-	\w = {\lambda \over 2} C^{-1} \1_k
-	\\
-	{\partial\Lambda \over \partial \lambda} = \wt\1_k - 1 \eqq 0
-	\quad\Longrightarrow\quad 
-	\wt\1_k = 1 
-\end{gather*}
-We now replace w in the constraint $\wt\1_k = 1 $. Since $C=C^\top$ we find 
-\begin{gather*}
-	{\lambda \over 2} = {1\over \1_k^\top C^{-1}\1_k } 
-\end{gather*}
-(ii) Replacing $\lambda/2$ in the deduced definition of $w$ leads to the desired result. 
-The candidate w is indeed a minimum since ${\partial^2\Lambda\over\partial{w}^2}=2C$ 
-(invertible covariance matrices have positive definite quadratic forms).\qed\\
-\\
-(iii) Multiplying by C from the left in the deduced definition of $w$ leads to $Cw={\lambda\over 2}\1_k$ (resp. $Cw'=\1_k$ for
-$w'={2\over\lambda}w$). Both, $w'$ and $w$, point to the same direction. 
-Therefore, by rescaling $w'$ such that ${w'}^\top\1_k=1={w}^\top\1_k$ the desired $w$ is identified.
-\qed      
+\Longrightarrow
+	\begin{bmatrix}
+	\Xt\Cxx X & 0 \\
+	0 & \Yt\Cyy Y  
+	\end{bmatrix}^{-1}
+	\begin{bmatrix}
+	0 & \Xt\Cxy Y  \\
+	\Yt\Cyx X & 0 
+	\end{bmatrix}
+	\begin{bmatrix}
+	 \ax  \\
+	 \ay
+	\end{bmatrix}
+\eqq	 
+	 \lx		
+	I
+	\begin{bmatrix}
+	 \ax  \\
+	 \ay
+	\end{bmatrix}
+\end{align*}
+By finding the solutions $\ax^*$ and $\ay^*$, the dual variable $\lx$
+is identified as this is an eigenvalue problem. 
+Each eigenvalue $\lx$ corresponds to an eigenvector $[\ax,\ay]^\top$. 
+Hence the lagrangian does not depend on $\lx$ which means 
+$\forall\lx . \lag(\ax^*,\ay^*,\lx) = \lag(\ax^*,\ay^*)$. 
+For the dual problem we therefore find: 
+\\     
+\begin{align*}
+	\min_\lx \max_{\ax,\ay} \lag(\ax,\ay,\lx) = \min_\lx \lag(\ax^*,\ay^*,\lx) = \lag(\ax^*,\ay^*)
+\end{align*} 
+
 \end{document}
