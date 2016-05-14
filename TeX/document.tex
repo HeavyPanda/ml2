@@ -223,8 +223,8 @@ the determinants of the principle minors alternate.
 We already know that the 
 first principle minor $\Xt\Cxx X$ or $\Yt\Cyy Y$ can only be positive. 
 Then, the second principle minor
-should be negative, which means $-AA-BB-AB-BA<0$. 
-This is true as this is the quadratic form $-(A-B)^\top (A-B)<0$. 
+should be negative, which means $-A^2-B^2-AB-BA<0$. 
+This is true as this is the quadratic form $-(A-B)^2<0$. 
 Ultimately, positive 
 $\Xt\Cxx X$ or $\Yt\Cyy Y$ is solely necessary for a solution likewise.\\
 \textbf{(c)} By finding the solutions $\ax^*$ and $\ay^*$, the dual variable $\lx$
@@ -238,6 +238,22 @@ $
 = \min_\lx \lag(\ax^*,\ay^*,\lx) 
 = \lag(\ax^*,\ay^*)
 $
+\newpage
+\extitle{Exercise 2}
+\textbf{(a)} Let $\Phi$ be a general symbol for an appropriate feature mapping and 
+define $\Phi(X) := [\Phi(x^{(1)}, \Phi(x^{(2)}), \ldots, \Phi(x^{(N)}]$ for each 
+dataset X. As in exercise (1), by starting with $w_x = \Phi(X)\ax$ and 
+$w_y = \Phi(Y)\ay$ one ends up with the eigenvalue problem stated in the task 
+description of exercise (1b), where $A = \Phi(X)^\top \Phi(X) = K_x$ and
+$B = \Phi(X)^\top \Phi(X) = K_y$. The inner products in the Gramian matrices 
+don't need to be computed via $\Phi$ explicitly but rather via the kernels' 
+definitions. \\
+\\
+\textbf{(b)} 
+The results $\ax, \ay$ are linear combinations of the N vectors in the respective 
+feature spaces, which is spanned by $\Phi(X)$, $\Phi(Y)$. The solutions can be interpreted as directions in the input space 
+if $\Phi$ is a conformal map, otherwise not.    
+
 \end{document}
 
 
