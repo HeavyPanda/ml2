@@ -123,7 +123,7 @@ Sascha Huk, 321249;\quad Viktor Jeney, 348969;\quad Mario Tambos, ??????;\quad J
 
  
 \extitle{Exercise 1}
-(a)
+\textbf{(a)}
 For data-span constructed $w_x = X\ax$ and $w_y = Y\ay$ the primal problem is:  
 %\begin{align*}
 %	\argmax_{\ax,\ay} (X\ax)^\top C_{xy} Y\ay \\
@@ -131,9 +131,10 @@ For data-span constructed $w_x = X\ax$ and $w_y = Y\ay$ the primal problem is:
 %	 (Y\ay)^\top C_{yy} Y\ay - 1 &= 0
 %\end{align*}
 \begin{align*}
-	\max_{\ax,\ay} \ax^\top X^\top C_{xy} Y\ay \\
-	\text{s.t. } \ax^\top X^\top C_{xx} X\ax - 1 &= 0 \\
-	 \ay^\top Y^\top C_{yy} Y\ay - 1 &= 0
+	\max_{\ax,\ay} &\ax^\top X^\top C_{xy} Y\ay \\ 
+	\text{s.t. } \ax^\top X^\top C_{xx} X\ax - 1 &= 0 
+	\quad\quad ,\quad\quad
+	 \ay^\top Y^\top C_{yy} Y\ay - 1 = 0
 \end{align*}
 Lagrangian (the factor 1/2 is introduced just for convenience):
 \begin{align*}
@@ -169,7 +170,7 @@ Now the derivatives can be rewritten as follows:
 	\quad\quad ,&\quad\quad
 	\Yt\Cyx X\ax \eqq \lx\Yt\Cyy Y\ay
 \end{align*} 
-(b+c) The same in blockmatrix form:
+The same in blockmatrix form:
 \begin{align*}
 	\begin{bmatrix}
 	0 & \Xt\Cxy Y  \\
@@ -211,15 +212,39 @@ Now the derivatives can be rewritten as follows:
 	 \ay
 	\end{bmatrix}
 \end{align*}
-By finding the solutions $\ax^*$ and $\ay^*$, the dual variable $\lx$
+\textbf{(a)} $\Xt\Cxx X$ and $\Yt\Cxx Y$ are positive semi-definite. 
+At least after regularizing one of these blocks, the diagonal block matrix
+becomes positive definite / invertible, which leads to a non-trivial 
+solution. \\
+\textbf{(b)} In comparison, the same conditions occur when viewing the Jacobian of $\lag$. 
+The Jacobian has to be negative definite. 
+Since the Jacobian is symmetric, this is true iff
+the determinants of the principle minors alternate. 
+We already know that the 
+first principle minor $\Xt\Cxx X$ or $\Yt\Cyy Y$ can only be positive. 
+Then, the second principle minor
+should be negative, which means $-AA-BB-AB-BA<0$. 
+This is true as this is the quadratic form $-(A-B)^\top (A-B)<0$. 
+Ultimately, positive 
+$\Xt\Cxx X$ or $\Yt\Cyy Y$ is solely necessary for a solution likewise.\\
+\textbf{(c)} By finding the solutions $\ax^*$ and $\ay^*$, the dual variable $\lx$
 is identified as this is an eigenvalue problem. 
 Each eigenvalue $\lx$ corresponds to an eigenvector $[\ax,\ay]^\top$. 
-Hence the lagrangian does not depend on $\lx$ which means 
+Therefore, the lagrangian does not depend on $\lx$ which means 
 $\forall\lx . \lag(\ax^*,\ay^*,\lx) = \lag(\ax^*,\ay^*)$. 
-For the dual problem we therefore find: 
-\\     
-\begin{align*}
-	\min_\lx \max_{\ax,\ay} \lag(\ax,\ay,\lx) = \min_\lx \lag(\ax^*,\ay^*,\lx) = \lag(\ax^*,\ay^*)
-\end{align*} 
-
+For the dual problem we therefore find
+$ 
+\min_\lx \max_{\ax,\ay} \lag(\ax,\ay,\lx) 
+= \min_\lx \lag(\ax^*,\ay^*,\lx) 
+= \lag(\ax^*,\ay^*)
+$
 \end{document}
+
+
+
+
+
+
+
+
+
