@@ -98,9 +98,12 @@
 \newcommand{\w}{w}
 \newcommand{\lx}{{\lambda_{x}}}
 \newcommand{\ly}{{\lambda_{y}}}
+\newcommand{\wx}{{w_{x}}}
+\newcommand{\wy}{{w_{y}}}
+\newcommand{\wxt}{w_{x}^\top}
+\newcommand{\wyt}{w_{y}^\top}
 \newcommand{\ax}{{\alpha_{x}}}
 \newcommand{\ay}{{\alpha_{y}}}
-
 \newcommand{\axt}{\alpha_{x}^\top}
 \newcommand{\ayt}{\alpha_{y}^\top}
 \newcommand{\Cxx}{C_{xx}}
@@ -229,16 +232,19 @@ should be negative, which means $-A^2-B^2-AB-BA<0$.
 This is true as this is the quadratic form $-(A-B)^2<0$. 
 Ultimately, positive 
 $\Xt\Cxx X$ or $\Yt\Cyy Y$ is solely necessary for a solution likewise.\\
-\textbf{(c)} By finding the solutions $\ax^*$ and $\ay^*$, the dual variable $\lx$
-is identified as this is an eigenvalue problem. 
-Each eigenvalue $\lx$ corresponds to an eigenvector $[\ax,\ay]^\top$. 
-Therefore, the lagrangian does not depend on $\lx$ which means 
+\textbf{(c)} After solving the eigenvalue problem above the solution $\wx$, $\wy$ 
+to the original problem can be obtained by the given identity 
+$\wx = X\ax$ and $\wy = Y\ay$. 
+By finding the solutions $\ax^*$ and $\ay^*$, the dual variable $\lx$
+is determined (eigenvalue problem). Each eigenvalue $\lx$ corresponds 
+to an eigenvector $[\ax,\ay]^\top$. 
+Therefore, the dual program does not depend on $\lx$ anymore, which means 
 $\forall\lx . \lag(\ax^*,\ay^*,\lx) = \lag(\ax^*,\ay^*)$. 
-For the dual problem we therefore find
+We therefore find
 $ 
 \min_\lx \max_{\ax,\ay} \lag(\ax,\ay,\lx) 
 = \min_\lx \lag(\ax^*,\ay^*,\lx) 
-= \lag(\ax^*,\ay^*)
+= \lag(\ax^*,\ay^*) 
 $
 \newpage
 \extitle{Exercise 2}
@@ -256,8 +262,66 @@ The results $\ax, \ay$ are linear combinations of the N vectors in the respectiv
 feature spaces, which is spanned by $\Phi(X)$, $\Phi(Y)$. The solutions can be interpreted as directions in the input space 
 if $\Phi$ is a conformal map, otherwise not.    
 
+\newpage
 \extitle{Exercise 3}
+\textbf{(a)} Taking the derivative of the new objective wrt. $\wxt$ and $\wyt$ and setting to 
+zero leads to this eigenvalue quation: 
+\begin{align*}
+	\begin{bmatrix}
+	0 & \Cxy \\
+	\Cyx & 0 
+	\end{bmatrix}
+	\begin{bmatrix}
+	 \wx  \\
+	 \wy
+	\end{bmatrix}
+\eqq	 
+	2\alpha		
+	\begin{bmatrix}
+	\{\Cxx\} & 0 \\
+	0 & \{\Cyy\}   
+	\end{bmatrix}
+	\begin{bmatrix}
+	 \wx  \\
+	 \wy
+	\end{bmatrix}	
+\end{align*}
+where
+\begin{align*} 
+	\{\Cxx\} := \begin{cases} \Cxx &\text{if } \wxt\Cxx\wx > 1\\ 0 &\text{else} \end{cases}
+	\quad\quad\quad\quad
+	\{\Cyy\} := \begin{cases} \Cyy &\text{if } \wyt\Cyy\wy > 1\\ 0 &\text{else} \end{cases}
+\end{align*}
+For positive definite $\Cxx$ and $\Cyy$ solving this equation is possible
+iff $\wxt\Cxx\wx > 1$ and $\wyt\Cyy\wy > 1$. 
+One could state a corresponding optimization problem as follows: 
+\begin{gather*}
+	\max_{\wx,\wy} \wxt\Cxy\wy \\ 
+	\text{s.t. } \wyt\Cyy\wy = \wxt C_{xx} \wx > 1 
+\end{gather*}
+\\
+(Remark: So what\ldots I'm completely unsure what we should have learned here.)
+\\
+\\
 \textbf{(b)}
+We express the gradient of the new objective J wrt. $\theta_x$
+as a function of the Jacobian matrix ${\partial\phi_x\over\partial\theta_x}$:\\
+\\
+\begin{gather*}
+grad_{\theta_x}J 
+= 
+\wxt\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x} \phi^\top_y }]\wy
++ \alpha 
+	\begin{cases} \wxt
+	\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x} \phi^\top_x} + { \phi_x {\partial\phi_x^\top\over\partial\theta_x} } ]
+	\wx &\text{if } \wxt\Cxx\wx > 1\\ 0 &\text{else} \end{cases}
+\end{gather*}
+(Remark: So what\ldots I'm completely unsure how this should help us to find the parameters $\theta_x$)
+
+
+
+(Remark: Mario's solution to 3.b)
+
 
 Given $\theta \in \mathbb{R}^N, \frac{\partial\phi_x}{\partial \theta_x} = [\frac{\partial\phi_x}{\partial \theta_(x, 1)}, \dots, \frac{\partial\phi_x}{\partial \theta_(x, N)}]$:
 
@@ -282,3 +346,4 @@ $$
 $$
 $\forall i \in [1,\dots, N]$
 \end{document}
+
