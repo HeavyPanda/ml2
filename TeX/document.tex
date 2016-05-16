@@ -262,7 +262,7 @@ The results $\ax, \ay$ are linear combinations of the N vectors in the respectiv
 feature spaces, which is spanned by $\Phi(X)$, $\Phi(Y)$. The solutions can be interpreted as directions in the input space 
 if $\Phi$ is a conformal map, otherwise not.    
 
-\newpage
+
 \extitle{Exercise 3}
 \textbf{(a)} Taking the derivative of the new objective wrt. $\wxt$ and $\wyt$ and setting to 
 zero leads to this eigenvalue quation: 
@@ -305,26 +305,34 @@ One could state a corresponding optimization problem as follows:
 \\
 \textbf{(b)}
 We express the gradient of the new objective J wrt. $\theta_x$
-as a function of the Jacobian matrix ${\partial\phi_x\over\partial\theta_x}$:\\
-\\
+as a function of the Jacobian ${\partial\phi_x\over\partial\theta_x}$:\\
 \begin{gather*}
 grad_{\theta_x}J 
 = 
-\wxt\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x} \phi^\top_y }]\wy
+\wxt\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x}\otimes \phi^\top_y }]\wy
 + \alpha 
 	\begin{cases} \wxt
-	\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x} \phi^\top_x} + { \phi_x {\partial\phi_x^\top\over\partial\theta_x} } ]
+	\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x} \otimes \phi^\top_x} + { \phi_x \otimes{\partial\phi_x^\top\over\partial\theta_x} } ]
 	\wx &\text{if } \wxt\Cxx\wx > 1\\ 0 &\text{else} \end{cases}
 \end{gather*}
+Since $\phi_x\phi_y^\top$ is a tensor product we find
+$
+{\partial\phi_x\phi_y^\top\over\partial\theta_x} 
+= {\partial\phi_x\otimes\phi_y^\top\over\partial\theta_x}
+= {\partial\phi_x\over\partial\theta_x}\otimes\phi_y^\top
++ \phi_x\otimes{\partial\phi_y^\top\over\partial\theta_x}
+= {\partial\phi_x\over\partial\theta_x}\otimes\phi_y^\top
+$
+\\
 (Remark: So what\ldots I'm completely unsure how this should help us to find the parameters $\theta_x$)
-
-
-
-(Remark: Mario's solution to 3.b)
-
-
-Given $\theta \in \mathbb{R}^N, \frac{\partial\phi_x}{\partial \theta_x} = [\frac{\partial\phi_x}{\partial \theta_(x, 1)}, \dots, \frac{\partial\phi_x}{\partial \theta_(x, N)}]$:
-
+\\
+\\
+\textbf{Mario's solution to 3.b}\\
+Given 
+$\theta \in \mathbb{R}^N, \frac{\partial\phi_x}{\partial \theta_x} 
+= [\frac{\partial\phi_x}{\partial \theta_(x, 1)}, 
+   \dots, 
+   \frac{\partial\phi_x}{\partial \theta_(x, N)}]$:
 \begin{align*}
     \frac{\partial}{\partial \theta_x} & w^{\top}_x\E(\phi_x\phi_y^{\top})w_y
                                                                        + \alpha\left[\min(0, 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x + 
