@@ -310,7 +310,7 @@ as a function of the Jacobian ${\partial\phi_x\over\partial\theta_x}$:\\
 grad_{\theta_x}J 
 = 
 \wxt\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x}\otimes \phi^\top_y }]\wy
-+ \alpha 
+- \alpha 
 	\begin{cases} \wxt
 	\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x} \otimes \phi^\top_x} + { \phi_x \otimes{\partial\phi_x^\top\over\partial\theta_x} } ]
 	\wx &\text{if } \wxt\Cxx\wx > 1\\ 0 &\text{else} \end{cases}
@@ -322,36 +322,40 @@ $
 = {\partial\phi_x\over\partial\theta_x}\otimes\phi_y^\top
 + \phi_x\otimes{\partial\phi_y^\top\over\partial\theta_x}
 = {\partial\phi_x\over\partial\theta_x}\otimes\phi_y^\top
-$
+$.
 \\
-(Remark: So what\ldots I'm completely unsure how this should help us to find the parameters $\theta_x$)
+Explanation why $\alpha$ became $-\alpha$ in the gradient: Let $f(x) = min(0,1-x)$
+and $g(\theta) = \wxt\Cxx\wx$. Now we take took the derivative of $f(g(\theta))$
+by using the chain rule. So, the minus comes from the derivative of f.     
+\\
+%(Remark: So what\ldots I'm completely unsure how this should help us to find the parameters $\theta_x$)
 \\
 \\
-\textbf{Mario's solution to 3.b}\\
-Given 
-$\theta \in \mathbb{R}^N, \frac{\partial\phi_x}{\partial \theta_x} 
-= [\frac{\partial\phi_x}{\partial \theta_(x, 1)}, 
-   \dots, 
-   \frac{\partial\phi_x}{\partial \theta_(x, N)}]$:
-\begin{align*}
-    \frac{\partial}{\partial \theta_x} & w^{\top}_x\E(\phi_x\phi_y^{\top})w_y
-                                                                       + \alpha\left[\min(0, 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x + 
-                                                                                               \min(0, 1-w^{\top}_y\E(\phi_y\phi^{\top}_y))w_y
-                                                                                       \right] \\
-                                                                   & = w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_x} \phi^{\top}_y)w_y
-                                                                       + \alpha  \frac{\partial}{\partial \theta_x} \min(0, 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x
-\end{align*} 
-$$
- = \begin{cases}
-                                                                   w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_y)w_y
-                                                                       - \alpha  w^{\top}_x\E(
-												    \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_x
-												 + \phi_x(\frac{\partial\phi_x}{\partial \theta_(x, i)})^{\top}
-							   )w_x, &  \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x < 0 \\
-                                                                   w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_y)w_y,  &  \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x > 0 \\
-                                                                   \text{undefined}, & \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x = 0
-\end{cases}
-$$
-$\forall i \in [1,\dots, N]$
+% \textbf{Mario's solution to 3.b}\\
+% Given 
+% $\theta \in \mathbb{R}^N, \frac{\partial\phi_x}{\partial \theta_x} 
+% = [\frac{\partial\phi_x}{\partial \theta_(x, 1)}, 
+%    \dots, 
+%    \frac{\partial\phi_x}{\partial \theta_(x, N)}]$:
+% \begin{align*}
+%     \frac{\partial}{\partial \theta_x} & w^{\top}_x\E(\phi_x\phi_y^{\top})w_y
+%                                                                        + \alpha\left[\min(0, 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x + 
+%                                                                                                \min(0, 1-w^{\top}_y\E(\phi_y\phi^{\top}_y))w_y
+%                                                                                        \right] \\
+%                                                                    & = w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_x} \phi^{\top}_y)w_y
+%                                                                        + \alpha  \frac{\partial}{\partial \theta_x} \min(0, 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x
+% \end{align*} 
+% $$
+%  = \begin{cases}
+%                                                                    w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_y)w_y
+%                                                                        - \alpha  w^{\top}_x\E(
+% 												    \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_x
+% 												 + \phi_x(\frac{\partial\phi_x}{\partial \theta_(x, i)})^{\top}
+% 							   )w_x, &  \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x < 0 \\
+%                                                                    w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_y)w_y,  &  \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x > 0 \\
+%                                                                    \text{undefined}, & \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x = 0
+% \end{cases}
+% $$
+% $\forall i \in [1,\dots, N]$
 \end{document}
 
