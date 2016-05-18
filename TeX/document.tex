@@ -98,6 +98,8 @@
 \newcommand{\w}{w}
 \newcommand{\lx}{{\lambda_{x}}}
 \newcommand{\ly}{{\lambda_{y}}}
+\newcommand{\rhi}{{r^{(i)}}}
+\newcommand{\rhj}{{r^{(j)}}}
 \newcommand{\xhi}{{x^{(i)}}}
 \newcommand{\shi}{{s^{(i)}}}
 \newcommand{\xhj}{{x^{(j)}}}
@@ -168,16 +170,36 @@ Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad J
 	\\
 	=
 	{\partial\over\partial \shi} (\xhi - W\shi)^\top (\xhi - W\shi) 
-	              +	{\partial\over\partial \shi} \lambda |\shj|_1
+	              +	{\partial\over\partial \shi} \lambda |\shi|_1
 	\\
 	=
 	-2 W^\top(\xhi-W\shi) 
-	              +	\lambda \sum_{k=1}^h {\partial\over\partial \shi}|\shi_k|
+	              +	\lambda \sum_{k=1}^h {\partial\over\partial \shi}\shi_k 
+	              \quad\quad\text{($\shi_k\geq 0$)}
 	\\
 	=
 	-2 W^\top(\xhi-W\shi) 
-	              +	\lambda ({\shi_1\over|\shi_1|}, \ldots, {\shi_h\over|\shi_h|})^\top	
+	+	\lambda 1_h	
 \end{gather*} 
+\extitle{Exercise 2 - Sparsifying Non-Linearities}
+\textbf{(a)}
+The derivative wrt. to W is already equivalent. 
+Taking the derivative wrt. $\rhi$ we obtain:
+\begin{gather*}
+	{\partial\over\partial \rhi}\sum_{j=1}^N 
+	(|\xhj - Wg(\rhj)|^2 +	\lambda |\rhj|^2)
+	=
+	{\partial\over\partial \rhi} |\xhi - Wg(\rhj)|^2 
+	+ {\partial\over\partial \rhi} \lambda |\rhi|^2
+	\\
+	= -2 W^\top(\xhi-Wg(\rhi)){\partial\over\partial \rhi}g(\rhi) 
+	+	\lambda 2\rhi	 
+\end{gather*}
+Comparing the factors of $\lambda$ yields componentwise 
+differences by the componentwise factors $2\rhi_k$ $\forall k\in\{1,\ldots,h\}$. In order for 
+the two problems to be equal, we choose g such that it's Jacobian is 
+diagonal and such that it has the k-th of these factors on the k-th diagonal element.  
+Therefore we have an equivalent problem for $g(\rhi) = (\rhi_1^2, \ldots, \rhi_h^2)$.
 
 \end{document}
 
