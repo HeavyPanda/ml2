@@ -34,7 +34,7 @@
 \newcommand{\p}{p}
 \newcommand{\q}{r}
 \newcommand{\z}{w}
-\newcommand{\x}{\mathcal{D}}
+%\newcommand{\x}{\mathcal{D}}
 %\newcommand{\mlq}{-L(\q)}
 %\newcommand{\si}{i}
 %\newcommand{\sj}{j}
@@ -94,21 +94,27 @@
 \newcommand{\Xt}{{X^\top}}
 \newcommand{\xt}{{\x^\top}}
 \newcommand{\yt}{{\y^\top}}
-\newcommand{\wt}{{\w^\top}}
+\newcommand{\Wt}{{\W^\top}}
 \newcommand{\w}{w}
 \newcommand{\lx}{{\lambda_{x}}}
 \newcommand{\ly}{{\lambda_{y}}}
-\newcommand{\wx}{{w_{x}}}
-\newcommand{\wy}{{w_{y}}}
-\newcommand{\wxt}{w_{x}^\top}
-\newcommand{\wyt}{w_{y}^\top}
+\newcommand{\xhi}{{x^{(i)}}}
+\newcommand{\shi}{{s^{(i)}}}
+\newcommand{\xhj}{{x^{(j)}}}
+\newcommand{\shj}{{s^{(j)}}}
+\newcommand{\Wi}{{W_{i}}}
+\newcommand{\Wj}{{W_{j}}}
+\newcommand{\Wit}{W_{i}^\top}
+\newcommand{\Wjt}{W_{j}^\top}
+\newcommand{\Wij}{W_{ij}}
+\newcommand{\Wlk}{W_{lk}}
 \newcommand{\ax}{{\alpha_{x}}}
 \newcommand{\ay}{{\alpha_{y}}}
 \newcommand{\axt}{\alpha_{x}^\top}
 \newcommand{\ayt}{\alpha_{y}^\top}
 \newcommand{\Cxx}{C_{xx}}
 \newcommand{\Cxy}{C_{xy}}
-\newcommand{\Cyx}{C_{yx}}
+\newcommand{\Cyx}{C_{yx}} 
 \newcommand{\Cyy}{C_{yy}}
 \newcommand{\1}{\mathds{1}}
 \newcommand{\lag}{\mathcal{L}}
@@ -117,246 +123,66 @@
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 3}}
+\title{\b{Exercise Sheet 4}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
 
 % authors
-Sascha Huk, 321249;\quad Viktor Jeney, 348969;\quad Mario Tambos, 380599;\quad Jan Tinapp, 0380549\\
+Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
 
- 
-\extitle{Exercise 1}
+\extitle{Exercise 1 - Sparse Coding}
 \textbf{(a)}
-For data-span constructed $w_x = X\ax$ and $w_y = Y\ay$ the primal problem is:  
-%\begin{align*}
-%	\argmax_{\ax,\ay} (X\ax)^\top C_{xy} Y\ay \\
-%	\text{s.t. } (X\ax)^\top C_{xx} X\ax - 1 &= 0 \\
-%	 (Y\ay)^\top C_{yy} Y\ay - 1 &= 0
-%\end{align*}
-\begin{align*}
-	\max_{\ax,\ay} &\ax^\top X^\top C_{xy} Y\ay \\ 
-	\text{s.t. } \ax^\top X^\top C_{xx} X\ax - 1 &= 0 
-	\quad\quad ,\quad\quad
-	 \ay^\top Y^\top C_{yy} Y\ay - 1 = 0
-\end{align*}
-Lagrangian (the factor 1/2 is introduced just for convenience):
-\begin{align*}
-	\mathcal{L}=\axt\Xt\Cxy Y\ay - {1\over 2}\lx(\axt\Xt\Cxx X\ax - 1)
-	- {1\over 2}\ly(\ayt\Yt\Cyy Y\ay - 1)
-\end{align*}
-Partial derivatives:
-\begin{align*}
-	{\partial\lag\over\partial\axt} = \Xt\Cxy Y\ay - \lx\Xt\Cxx X\ax \eqq 0
-	\quad\quad ,&\quad\quad
-	{\partial\lag\over\partial\ayt} = \Yt\Cyx X\ax - \ly\Yt\Cyy Y\ay \eqq 0
-\end{align*}
-We now multiply with $\axt$, $\ayt$
-\begin{align*}
-	\axt\Xt\Cxy Y\ay = \lx\axt\Xt\Cxx X\ax
-	\quad\quad ,&\quad\quad
-	\ayt\Yt\Cyx X\ax = \ly\ayt\Yt\Cyy Y\ay
+\begin{gather*}
+	{\partial E\over\partial W}
+	=
+	{\partial\over\partial W}\eta |W|_F^2
+	+
+	{\partial\over\partial W} \sum_{i=1}^N (|\xhi - W\shi|^2 +	\lambda |\shi|_1)
 	\\
-	\Longrightarrow
-	\axt\Xt\Cxy Y\ay = \lx\axt\Xt\Cxx X\ax
-	\quad\quad ,&\quad\quad
-	\axt\Xt\Cxy Y\ay = \ly\ayt\Yt\Cyy Y\ay	
-\end{align*}
-From the auto-cov constraints follows
-\begin{align*}
-	&\axt\Xt\Cxy Y\ay = \lx\underbrace{\axt\Xt\Cxx X\ax}_{=1} 
-	= \ly\underbrace{\ayt\Yt\Cyy Y\ay}_{=1}
-	\quad \Longrightarrow \quad \lx = \ly
-\end{align*}
-Now the derivatives can be rewritten as follows:
-\begin{align*}
-	\Xt\Cxy Y\ay \eqq \lx\Xt\Cxx X\ax 
-	\quad\quad ,&\quad\quad
-	\Yt\Cyx X\ax \eqq \lx\Yt\Cyy Y\ay
-\end{align*} 
-The same in blockmatrix form:
-\begin{align*}
-	\begin{bmatrix}
-	0 & \Xt\Cxy Y  \\
-	\Yt\Cyx X & 0 
-	\end{bmatrix}
-	\begin{bmatrix}
-	 \ax  \\
-	 \ay
-	\end{bmatrix}
-\eqq	 
-	 \lx		
-	\begin{bmatrix}
-	\Xt\Cxx X & 0 \\
-	0 & \Yt\Cyy Y  
-	\end{bmatrix}
-	\begin{bmatrix}
-	 \ax  \\
-	 \ay
-	\end{bmatrix}
-\\
-\Longrightarrow
-	\begin{bmatrix}
-	\Xt\Cxx X & 0 \\
-	0 & \Yt\Cyy Y  
-	\end{bmatrix}^{-1}
-	\begin{bmatrix}
-	0 & \Xt\Cxy Y  \\
-	\Yt\Cyx X & 0 
-	\end{bmatrix}
-	\begin{bmatrix}
-	 \ax  \\
-	 \ay
-	\end{bmatrix}
-\eqq	 
-	 \lx		
-	I
-	\begin{bmatrix}
-	 \ax  \\
-	 \ay
-	\end{bmatrix}
-\end{align*}
-\textbf{(a)} $\Xt\Cxx X$ and $\Yt\Cxx Y$ are positive semi-definite. 
-At least after regularizing one of these blocks, the diagonal block matrix
-becomes positive definite / invertible, which leads to a non-trivial 
-solution. \\
-\textbf{(b)} In comparison, the same conditions occur when viewing the Jacobian of $\lag$. 
-The Jacobian has to be negative definite. 
-Since the Jacobian is symmetric, this is true iff
-the determinants of the principle minors alternate. 
-We already know that the 
-first principle minor $\Xt\Cxx X$ or $\Yt\Cyy Y$ can only be positive. 
-Then, the second principle minor
-should be negative, which means $-A^2-B^2-AB-BA<0$. 
-This is true as this is the quadratic form $-(A-B)^2<0$. 
-Ultimately, positive 
-$\Xt\Cxx X$ or $\Yt\Cyy Y$ is solely necessary for a solution likewise.\\
-\textbf{(c)} After solving the eigenvalue problem above the solution $\wx$, $\wy$ 
-to the original problem can be obtained by the given identity 
-$\wx = X\ax$ and $\wy = Y\ay$. 
-By finding the solutions $\ax^*$ and $\ay^*$, the dual variable $\lx$
-is determined (eigenvalue problem). Each eigenvalue $\lx$ corresponds 
-to an eigenvector $[\ax,\ay]^\top$. 
-Therefore, the dual program does not depend on $\lx$ anymore, which means 
-$\forall\lx . \lag(\ax^*,\ay^*,\lx) = \lag(\ax^*,\ay^*)$. 
-We therefore find
-$ 
-\min_\lx \max_{\ax,\ay} \lag(\ax,\ay,\lx) 
-= \min_\lx \lag(\ax^*,\ay^*,\lx) 
-= \lag(\ax^*,\ay^*) 
-$
-\newpage
-\extitle{Exercise 2}
-\textbf{(a)} Let $\Phi$ be a general symbol for an appropriate feature mapping and 
-define $\Phi(X) := [\Phi(x^{(1)}, \Phi(x^{(2)}), \ldots, \Phi(x^{(N)}]$ for each 
-dataset X. As in exercise (1), by starting with $w_x = \Phi(X)\ax$ and 
-$w_y = \Phi(Y)\ay$ one ends up with the eigenvalue problem stated in the task 
-description of exercise (1b), where $A = \Phi(X)^\top \Phi(X) = K_x$ and
-$B = \Phi(X)^\top \Phi(X) = K_y$. The inner products in the Gramian matrices 
-don't need to be computed via $\Phi$ explicitly but rather via the kernels' 
-definitions. \\
-\\
-\textbf{(b)} 
-The results $\ax, \ay$ are linear combinations of the N vectors in the respective 
-feature spaces, which is spanned by $\Phi(X)$, $\Phi(Y)$. The solutions can be interpreted as directions in the input space 
-if $\Phi$ is a conformal map, otherwise not.    
-
-
-\extitle{Exercise 3}
-\textbf{(a)} Taking the derivative of the new objective wrt. $\wxt$ and $\wyt$ and setting to 
-zero leads to this eigenvalue quation: 
-\begin{align*}
-	\begin{bmatrix}
-	0 & \Cxy \\
-	\Cyx & 0 
-	\end{bmatrix}
-	\begin{bmatrix}
-	 \wx  \\
-	 \wy
-	\end{bmatrix}
-\eqq	 
-	2\alpha		
-	\begin{bmatrix}
-	\{\Cxx\} & 0 \\
-	0 & \{\Cyy\}   
-	\end{bmatrix}
-	\begin{bmatrix}
-	 \wx  \\
-	 \wy
-	\end{bmatrix}	
-\end{align*}
-where
-\begin{align*} 
-	\{\Cxx\} := \begin{cases} \Cxx &\text{if } \wxt\Cxx\wx > 1\\ 0 &\text{else} \end{cases}
-	\quad\quad\quad\quad
-	\{\Cyy\} := \begin{cases} \Cyy &\text{if } \wyt\Cyy\wy > 1\\ 0 &\text{else} \end{cases}
-\end{align*}
-For positive definite $\Cxx$ and $\Cyy$ solving this equation is possible
-iff $\wxt\Cxx\wx > 1$ and $\wyt\Cyy\wy > 1$. 
-One could state a corresponding optimization problem as follows: 
-\begin{gather*}
-	\max_{\wx,\wy} \wxt\Cxy\wy \\ 
-	\text{s.t. } \wyt\Cyy\wy = \wxt C_{xx} \wx > 1 
-\end{gather*}
-\\
-%(Remark: So what\ldots I'm completely unsure what we should have learned here.)
-\\
-\\
+	= 
+	\eta\sum_{l}^{d}\sum_{k}^{h}{\partial\over\partial W} (\Wlk)^2
+	+ 
+	\sum_{i=1}^N
+		{\partial\over\partial W}(\xhi - W\shi)^\top (\xhi - W\shi)
+	\\
+	=
+	2\eta W
+	+ 
+	\sum_{i=1}^N
+		-2(\xhi - W\shi)\shi^\top
+	=
+	2\eta W
+	- 
+	2\sum_{i=1}^N
+		(\xhi - W\shi)\shi^\top			
+\end{gather*} 
 \textbf{(b)}
-We express the gradient of the new objective J wrt. $\theta_x$
-as a function of the Jacobian ${\partial\phi_x\over\partial\theta_x}$:\\
 \begin{gather*}
-grad_{\theta_x}J 
-= 
-\wxt\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x}\otimes \phi^\top_y }]\wy
-- \alpha 
-	\begin{cases} \wxt
-	\mathbb{E}[{ {\partial\phi_x\over\partial\theta_x} \otimes \phi^\top_x} + { \phi_x \otimes{\partial\phi_x^\top\over\partial\theta_x} } ]
-	\wx &\text{if } \wxt\Cxx\wx > 1\\ 0 &\text{else} \end{cases}
-\end{gather*}
-Since $\phi_x\phi_y^\top$ is a tensor product we find
-$
-{\partial\phi_x\phi_y^\top\over\partial\theta_x} 
-= {\partial\phi_x\otimes\phi_y^\top\over\partial\theta_x}
-= {\partial\phi_x\over\partial\theta_x}\otimes\phi_y^\top
-+ \phi_x\otimes{\partial\phi_y^\top\over\partial\theta_x}
-= {\partial\phi_x\over\partial\theta_x}\otimes\phi_y^\top
-$.
-\\
-Explanation why $\alpha$ became $-\alpha$ in the gradient: Let $f(x) = min(0,1-x)$
-and $g(\theta) = \wxt\Cxx\wx$. Now take the derivative of $f(g(\theta))$
-by using the chain rule. So, the minus comes from the derivative of f. 
-And f is differentiable at 1.    
-\\
-%(Remark: So what\ldots I'm completely unsure how this should help us to find the parameters $\theta_x$)
-\\
-\\
-% \textbf{Mario's solution to 3.b}\\
-% Given 
-% $\theta \in \mathbb{R}^N, \frac{\partial\phi_x}{\partial \theta_x} 
-% = [\frac{\partial\phi_x}{\partial \theta_(x, 1)}, 
-%    \dots, 
-%    \frac{\partial\phi_x}{\partial \theta_(x, N)}]$:
-% \begin{align*}
-%     \frac{\partial}{\partial \theta_x} & w^{\top}_x\E(\phi_x\phi_y^{\top})w_y
-%                                                                        + \alpha\left[\min(0, 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x + 
-%                                                                                                \min(0, 1-w^{\top}_y\E(\phi_y\phi^{\top}_y))w_y
-%                                                                                        \right] \\
-%                                                                    & = w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_x} \phi^{\top}_y)w_y
-%                                                                        + \alpha  \frac{\partial}{\partial \theta_x} \min(0, 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x
-% \end{align*} 
-% $$
-%  = \begin{cases}
-%                                                                    w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_y)w_y
-%                                                                        - \alpha  w^{\top}_x\E(
-% 												    \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_x
-% 												 + \phi_x(\frac{\partial\phi_x}{\partial \theta_(x, i)})^{\top}
-% 							   )w_x, &  \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x < 0 \\
-%                                                                    w^{\top}_x\E( \frac{\partial\phi_x}{\partial \theta_(x, i)} \phi^{\top}_y)w_y,  &  \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x > 0 \\
-%                                                                    \text{undefined}, & \text{if } 1-w^{\top}_x\E(\phi_x\phi^{\top}_x))w_x = 0
-% \end{cases}
-% $$
-% $\forall i \in [1,\dots, N]$
+	{\partial E\over\partial \shi}
+	=
+	{\partial\over\partial \shi}\eta |W|_F^2
+	+
+	{\partial\over\partial \shi} \sum_{j=1}^N (|\xhj - W\shj|^2 +	\lambda |\shj|_1)
+	\\
+	=
+	{\partial\over\partial \shi} (\xhi - W\shi)^\top (\xhi - W\shi) 
+	              +	{\partial\over\partial \shi} \lambda |\shj|_1
+	\\
+	=
+	-2 W^\top(\xhi-W\shi) 
+	              +	\lambda \sum_{k=1}^h {\partial\over\partial \shi}|\shi_k|
+	\\
+	=
+	-2 W^\top(\xhi-W\shi) 
+	              +	\lambda ({\shi_1\over|\shi_1|}, \ldots, {\shi_h\over|\shi_h|})^\top	
+\end{gather*} 
+
 \end{document}
+
+
+
+
+
 
