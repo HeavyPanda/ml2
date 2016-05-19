@@ -200,7 +200,49 @@ differences by the componentwise factors $2\rhi_k$ $\forall k\in\{1,\ldots,h\}$.
 the two problems to be equal, we choose g such that it's Jacobian is 
 diagonal and such that it has the k-th of these factors on the k-th diagonal element.  
 Therefore we have an equivalent problem for $g(\rhi) = (\rhi_1^2, \ldots, \rhi_h^2)$.
+\\
+\\
+\textbf{(b)}
+Both, the reconstruction error as well as the sparsity penalty, are 
+convex in both approaches. Since the sum of convex functions is again a convex 
+function we find a global, unique optimum in both problems. 
+Unfortunately, the derivative of the original problem wrt. $s_k$ 
+for $k\in\{1,\ldots,h\}$ does not exist in 0. It is therefore theoretically 
+problematic to use gradient descent on the original problem, even though 
+encountering this problem might be rather unlikely. 
 
+\newpage
+\extitle{Exercise 3 - Autoencoders}
+\textbf{(a)}
+Focus on the result of (2a), which is ${\partial E\over\partial \rhi}$. 
+Having $\rhi=V^\top\xhi$, by chainrule we get:
+\begin{gather*}
+{\partial E\over\partial V} 
+= {\partial E\over\partial\rhi} {\partial\rhi\over\partial V}
+= [-2 W^\top(\xhi-Wg(\rhi)){\partial\over\partial \rhi}g(\rhi) +	
+	\lambda 2\rhi] \xhi^\top
+\\
+= [-2 W^\top(\xhi-Wg(V^\top\xhi))g'(V^\top\xhi) +
+	\lambda 2V^\top\xhi] \xhi^\top
+\end{gather*}
+\\
+\textbf{(b)}
+\\
+(2) Optimizing wrt. $W,s^1,\ldots s^N$ and V is not a convex 
+optimization problem while the approaches in task 1 and 2 are convex. 
+The problem became harder to optimize. 
+\\
+\\
+(1)
+Infering the sources $\rhi$ from $\xhi$ is just the product $V^\top\xhi$ 
+(requires dxh multiplications). This does not endanger the feasibility of this method.
+\\
+\\
+(3)
+Non-convexity (or non-concavity) generally endangers 
+the feasibility of finding a solution. The computation generally becomes 
+either harder or more approximative. In comparison, the 1-layer network 
+is comparatively quick and exact solvable. 
 \end{document}
 
 
