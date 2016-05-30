@@ -125,7 +125,7 @@
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 4}}
+\title{\b{Exercise Sheet 5}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
@@ -134,115 +134,73 @@
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
 
-\extitle{Exercise 1 - Sparse Coding}
-\textbf{(a)}
+\extitle{Exercise 1 - Kernel Eigenvectors}
+\textbf{(a)}\\
+We use Lagrange multipliers:
 \begin{gather*}
-	{\partial E\over\partial W}
+	\lag
 	=
-	{\partial\over\partial W}\eta |W|_F^2
-	+
-	{\partial\over\partial W} \sum_{i=1}^N (|\xhi - W\shi|^2 +	\lambda |\shi|_1)
+	v^\top Cv - \lambda(v^\top v - 1) 
 	\\
+	{\partial\lag\over\partial v} 
+	=2(C - \lambda I)v \eqq \textbf{0} 
+	\quad\Longrightarrow\quad Cv\eqq\lambda v
+	\\
+	{\partial\lag\over\partial v^2}
+	=
+	2(C-\lambda I)
+\end{gather*}
+In every matrix C it holds that $eig(C-a I) = (\lambda_i-a)_{i\in\{1,\ldots,d\}}$
+(see eq. 286 in matrix cookbook) 
+where in this case $a=\max(\{\lambda_i\}_{i\in\{1,\ldots,d\}})$. 
+This means that the second order derivative has only negative eigenvalues 
+except for the largest eigenvalue, which is now zero.   
+Hence ${\partial\lag\over\partial v^2}$ is negative semi-definite (think 
+of the bilinearform of combinations of eigenvectors, 
+which correspond to the largest eigenvalue). 
+We therefore use another simple criterion, namely using 
+$v^\top v = 1$ and the necessary condition $Cv\eqq\lambda v$ in 
+our objective function $v^\top C v$:
+\begin{gather*}
+	\max_v v^\top C v 
+	=
+	\max(\{v^\top C v\}_{v})
+	=
+	\max(\{v^\top \lambda_i v\}_{v,i})
 	= 
-	\eta\sum_{l}^{d}\sum_{k}^{h}{\partial\over\partial W} (\Wlk)^2
-	+ 
-	\sum_{i=1}^N
-		{\partial\over\partial W}(\xhi - W\shi)^\top (\xhi - W\shi)
-	\\
-	=
-	2\eta W
-	+ 
-	\sum_{i=1}^N
-		-2(\xhi - W\shi)\shi^\top
-	=
-	2\eta W
-	- 
-	2\sum_{i=1}^N
-		(\xhi - W\shi)\shi^\top			
+	\max(\{\lambda_i\}_{i\in\{1,\ldots,d\}})
 \end{gather*} 
-\textbf{(b)}
+Since the necessary condition wrt. $v^\top v=1$ describes an eigenvalue problem,
+both cases are equivalent.  
+\\
+\\
+\textbf{(b)}\\
 \begin{gather*}
-	{\partial E\over\partial \shi}
-	=
-	{\partial\over\partial \shi}\eta |W|_F^2
-	+
-	{\partial\over\partial \shi} \sum_{j=1}^N (|\xhj - W\shj|^2 +	\lambda |\shj|_1)
-	\\
-	=
-	{\partial\over\partial \shi} (\xhi - W\shi)^\top (\xhi - W\shi) 
-	              +	{\partial\over\partial \shi} \lambda |\shi|_1
-	\\
-	=
-	-2 W^\top(\xhi-W\shi) 
-	              +	\lambda \sum_{k=1}^h {\partial\over\partial \shi}\shi_k 
-	              \quad\quad\text{($\shi_k\geq 0$)}
-	\\
-	=
-	-2 W^\top(\xhi-W\shi) 
-	+	\lambda 1_h	
+	\lambda v = Cv 
+	\quad\Longleftrightarrow\quad
+	v = {Cv\over\lambda} 
+	\quad\stackrel{\text{def. C}}{\Longleftrightarrow}\quad
+	v = \sum_{i=1}^N \phi(x_i)\underbrace{\phi(x_i)^\top v\over\lambda}_{\alpha_i} 
 \end{gather*} 
-\extitle{Exercise 2 - Sparsifying Non-Linearities}
-\textbf{(a)}
-The derivative wrt. to W is already equivalent. 
-Taking the derivative wrt. $\rhi$ we obtain:
+Comparing the coefficients with the given equation
+$v=\Phi^\top\alpha=\sum_{i=1}^N\phi(x_i)\alpha_i$, we get:
+\begin{equation}
+	{\phi(x_i)^\top v\over\lambda} = \alpha_i
+	\quad\Longleftrightarrow\quad
+	\phi(x_i)^\top v = \lambda\alpha_i
+	\quad\Longleftrightarrow\quad
+	\Phi v = \lambda\alpha
+\end{equation}
+We now conclude:
 \begin{gather*}
-	{\partial\over\partial \rhi}\sum_{j=1}^N 
-	(|\xhj - Wg(\rhj)|^2 +	\lambda |\rhj|^2)
-	=
-	{\partial\over\partial \rhi} |\xhi - Wg(\rhj)|^2 
-	+ {\partial\over\partial \rhi} \lambda |\rhi|^2
-	\\
-	= -2 W^\top(\xhi-Wg(\rhi)){\partial\over\partial \rhi}g(\rhi) 
-	+	\lambda 2\rhi	 
+	K\alpha = \Phi\Phi^\top\alpha = \Phi v \stackrel{(1)}{=} \lambda\alpha 
 \end{gather*}
-Comparing the factors of $\lambda$ yields componentwise 
-differences by the componentwise factors $2\rhi_k$ $\forall k\in\{1,\ldots,h\}$. In order for 
-the two problems to be equal, we choose g such that it's Jacobian is 
-diagonal and such that it has the k-th of these factors on the k-th diagonal element.  
-Therefore we have an equivalent problem for $g(\rhi) = (\rhi_1^2, \ldots, \rhi_h^2)$.
-\\
-\\
-\textbf{(b)}
-Both, the reconstruction error as well as the sparsity penalty, are 
-convex in both approaches. Since the sum of convex functions is again a convex 
-function we find a global, unique optimum in both problems. 
-Unfortunately, the derivative of the original problem wrt. $s_k$ 
-for $k\in\{1,\ldots,h\}$ does not exist in 0. It is therefore theoretically 
-problematic to use gradient descent on the original problem, even though 
-encountering this problem might be rather unlikely. 
 
-\newpage
-\extitle{Exercise 3 - Autoencoders}
-\textbf{(a)}
-Focus on the result of (2a), which is ${\partial E\over\partial \rhi}$. 
-Having $\rhi=V^\top\xhi$, by chainrule we get:
-\begin{gather*}
-{\partial E\over\partial V} 
-= {\partial E\over\partial\rhi} {\partial\rhi\over\partial V}
-= [-2 W^\top(\xhi-Wg(\rhi)){\partial\over\partial \rhi}g(\rhi) +	
-	\lambda 2\rhi] \xhi^\top
-\\
-= [-2 W^\top(\xhi-Wg(V^\top\xhi))g'(V^\top\xhi) +
-	\lambda 2V^\top\xhi] \xhi^\top
-\end{gather*}
-\\
-\textbf{(b)}
-\\
-(2) Optimizing wrt. $W,s^1,\ldots s^N$ and V is not a convex 
-optimization problem while the approaches in task 1 and 2 are convex. 
-The problem became harder to optimize. 
-\\
-\\
-(1)
-Infering the sources $\rhi$ from $\xhi$ is just the product $V^\top\xhi$ 
-(requires dxh multiplications). This does not endanger the feasibility of this method.
-\\
-\\
-(3)
-Non-convexity (or non-concavity) generally endangers 
-the feasibility of finding a solution. The computation generally becomes 
-either harder or more approximative. In comparison, the 1-layer network 
-is comparatively quick and exact solvable. 
+\extitle{Exercise 2}
+Define \[ s:=(s_i)_{i=1,...,N}\] and the matrix of eigenvectors \[ U:=(u^T_i)_{i=1,...,N}. \]
+Then \[ Uy=s. \]
+Because all eigenvectors are orthogonal, $U$ is an orthogonal matrix. This means in particular, that \[||Uy||^2_2=||y||^2_2. \] 
+All in all we get \[ \sum_{i=1}^{N}s_i=||s||^2_2=||Uy||^2_2=||y||^2_2 \]
 \end{document}
 
 
