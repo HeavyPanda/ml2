@@ -125,7 +125,7 @@
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 5}}
+\title{\b{Exercise Sheet 6}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
@@ -134,73 +134,28 @@
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
 
-\extitle{Exercise 1 - Kernel Eigenvectors}
+\extitle{Exercise 1}
 \textbf{(a)}\\
-We use Lagrange multipliers:
-\begin{gather*}
-	\lag
-	=
-	v^\top Cv - \lambda(v^\top v - 1) 
-	\\
-	{\partial\lag\over\partial v} 
-	=2(C - \lambda I)v \eqq \textbf{0} 
-	\quad\Longrightarrow\quad Cv\eqq\lambda v
-	\\
-	{\partial\lag\over\partial v^2}
-	=
-	2(C-\lambda I)
-\end{gather*}
-In every matrix C it holds that $eig(C-a I) = (\lambda_i-a)_{i\in\{1,\ldots,d\}}$
-(see eq. 286 in matrix cookbook) 
-where in this case $a=\max(\{\lambda_i\}_{i\in\{1,\ldots,d\}})$. 
-This means that the second order derivative has only negative eigenvalues 
-except for the largest eigenvalue, which is now zero.   
-Hence ${\partial\lag\over\partial v^2}$ is negative semi-definite (think 
-of the bilinearform of combinations of eigenvectors, 
-which correspond to the largest eigenvalue). 
-We therefore use another simple criterion, namely using 
-$v^\top v = 1$ and the necessary condition $Cv\eqq\lambda v$ in 
-our objective function $v^\top C v$:
-\begin{gather*}
-	\max_v v^\top C v 
-	=
-	\max(\{v^\top C v\}_{v})
-	=
-	\max(\{v^\top \lambda_i v\}_{v,i})
-	= 
-	\max(\{\lambda_i\}_{i\in\{1,\ldots,d\}})
-\end{gather*} 
-Since the necessary condition wrt. $v^\top v=1$ describes an eigenvalue problem,
-both cases are equivalent.  
-\\
-\\
-\textbf{(b)}\\
-\begin{gather*}
-	\lambda v = Cv 
-	\quad\Longleftrightarrow\quad
-	v = {Cv\over\lambda} 
-	\quad\stackrel{\text{def. C}}{\Longleftrightarrow}\quad
-	v = \sum_{i=1}^N \phi(x_i)\underbrace{\phi(x_i)^\top v\over\lambda}_{\alpha_i} 
-\end{gather*} 
-Comparing the coefficients with the given equation
-$v=\Phi^\top\alpha=\sum_{i=1}^N\phi(x_i)\alpha_i$, we get:
-\begin{equation}
-	{\phi(x_i)^\top v\over\lambda} = \alpha_i
-	\quad\Longleftrightarrow\quad
-	\phi(x_i)^\top v = \lambda\alpha_i
-	\quad\Longleftrightarrow\quad
-	\Phi v = \lambda\alpha
-\end{equation}
-We now conclude:
-\begin{gather*}
-	K\alpha = \Phi\Phi^\top\alpha = \Phi v \stackrel{(1)}{=} \lambda\alpha 
-\end{gather*}
+Define
+\[ y:=x^TW-b^T \]
+\begin{align*}
+p_{\theta}(x)&=\sum_{h\in\{-1,0,1\}^N}p(x,h)\\
+&=\sum_{h\in\{-1,0,1\}^N}\frac{1}{Z}\exp(yh+x^Ta)\\
+&=\frac{1}{Z}\exp(x^Ta)\sum_{h\in\{-1,0,1\}^N}\exp(yh)\\
+&=\frac{1}{Z}\exp(x^Ta)\sum_{h\in\{-1,0,1\}^N}\exp(\sum_{i=1}^{N}y_ih_i)\\
+&=\frac{1}{Z}\exp(x^Ta)\sum_{h\in\{-1,0,1\}^N}\prod_{i=1}^{N}\exp(y_ih_i)\\
+\end{align*}
+Because the expression $\exp(y_ih_i)$ only depends on the i'th component of h, we can rewrite the sum and product to get:
+\begin{align*}
+p_{\theta}(x)&=\frac{1}{Z}\exp(x^Ta)\prod_{i=1}^{N}\sum_{h\in\{-1,0,1\}}\exp(y_ih_i)\\
+&=\frac{1}{Z}\exp(x^Ta)\exp(\log(\prod_{i=1}^{N}\sum_{h\in\{-1,0,1\}}\exp(y_ih_i)))\\
+&=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(\sum_{h\in\{-1,0,1\}}\exp(y_ih_i)))\\
+&=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(1+e^{y_i}+e^{-y_i}))\\
+&=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(1+2cosh(y_i)))\\
+&=\frac{1}{Z}exp(x^Ta+\sum_{i=1}^{N}\log(1+2cosh(w_ix-b_i)))\\
+\end{align*}
+\textbf{(a)}\\
 
-\extitle{Exercise 2}
-Define \[ s:=(s_i)_{i=1,...,N}\] and the matrix of eigenvectors \[ U:=(u^T_i)_{i=1,...,N}. \]
-Then \[ Uy=s. \]
-Because all eigenvectors are orthogonal, $U$ is an orthogonal matrix. This means in particular, that \[||Uy||^2_2=||y||^2_2. \] 
-All in all we get \[ \sum_{i=1}^{N}s_i^2=||s||^2_2=||Uy||^2_2=||y||^2_2 \]
 \end{document}
 
 
