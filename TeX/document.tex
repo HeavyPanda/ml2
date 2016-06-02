@@ -152,10 +152,21 @@ p_{\theta}(x)&=\frac{1}{Z}\exp(x^Ta)\prod_{i=1}^{N}\sum_{h\in\{-1,0,1\}}\exp(y_i
 &=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(\sum_{h\in\{-1,0,1\}}\exp(y_ih_i)))\\
 &=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(1+e^{y_i}+e^{-y_i}))\\
 &=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(1+2cosh(y_i)))\\
-&=\frac{1}{Z}exp(x^Ta+\sum_{i=1}^{N}\log(1+2cosh(w_ix-b_i)))\\
+&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(1+2cosh(w_ix-b_i)))\\
 \end{align*}
-\textbf{(a)}\\
-
+\begin{align*}
+&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(2(\frac{1}{2}+cosh(w_ix-b_i))))\\
+&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(2)+(\frac{1}{2}+cosh(w_ix-b_i)))\\
+&=\frac{1}{Z}\exp(N\log(2)+x^Ta+\sum_{i=1}^{N}(\frac{1}{2}+cosh(w_ix-b_i)))\\
+&=\frac{1}{Z}2^N\exp(x^Ta+\sum_{i=1}^{N}(\frac{1}{2}+cosh(w_ix-b_i)))\\
+\end{align*}
+With \[ Z':=\frac{2^N}{Z} \]
+the desired result follows.\\
+\textbf{(b)}\\
+First compute gradients of $F$:
+\begin{align*}
+\bigtriangledown_aF
+\end{align*}
 \end{document}
 
 
