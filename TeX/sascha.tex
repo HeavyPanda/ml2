@@ -1,0 +1,227 @@
+\documentclass[a4paper]{article}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\pagestyle{plain}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usepackage{eurosym}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{dlfltxbcodetips}
+\usepackage{cancel}
+
+%    \usepackage{tkz-graph}  
+%    \usetikzlibrary{shapes.geometric}%   
+% 	 \usetikzlibrary{bayesnet}
+	
+\input{preamble.tex} % import config
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}  
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\vivid}{\stackrel{\text{vivid}}{=}}
+\newcommand{\icol}[1]{% inline column vector
+  \left(\begin{smallmatrix}#1\end{smallmatrix}\right)%
+}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\newcommand{\mlq}{F(\q)}
+\newcommand{\si}{s}
+\newcommand{\sj}{{s'}}
+\newcommand{\p}{p}
+\newcommand{\q}{r}
+\newcommand{\z}{w}
+%\newcommand{\x}{\mathcal{D}}
+%\newcommand{\mlq}{-L(\q)}
+%\newcommand{\si}{i}
+%\newcommand{\sj}{j}
+%\newcommand{\p}{p}
+%\newcommand{\q}{q}
+%\newcommand{\z}{Z}
+%\newcommand{\x}{X}
+
+\newcommand{\pxgz}{\p(\x|\z)}
+\newcommand{\pzgx}{\p(\z|\x)}
+\newcommand{\pxz}{\p(\x,\z)}
+\newcommand{\px}{\p(\x)}
+
+\newcommand{\qz}{\q(\z)}
+\newcommand{\qi}{\q_\si}
+\newcommand{\qj}{\q_\sj}
+\newcommand{\qk}{\q_k}
+\newcommand{\pz}{\p(\z)}
+\newcommand{\pzi}{\p(\z_\si)}
+\newcommand{\pzj}{\p(\z_\sj)}
+\newcommand{\pzk}{\p(\z_k)}
+
+
+
+\newcommand{\zi}{\z_\si}
+\newcommand{\zj}{\z_\sj}
+\newcommand{\zk}{\z_k}
+\newcommand{\dz}{\mathrm{d}\z}
+\newcommand{\dzi}{\mathrm{d}\z_\si}
+\newcommand{\dzj}{\mathrm{d}\z_\sj}
+\newcommand{\dzk}{\mathrm{d}\z_k} 
+
+\newcommand{\E}{\mathbb{E}}
+
+
+
+
+
+%\newcommand{\propq}{ \underset{ \text{wrt.}\put(1,1){\scriptsize *}q }{\propto} }
+
+\newcommand{\eqs}[1]{ \stackrel{#1}{=}  }
+\newcommand{\eqq}{  \overset{\text{!}}{=} }
+\newcommand{\propqz}{ \underset{ \overset{\text{wrt.}}{\qz} }{\propto} }
+\newcommand{\propz}{ \underset{ \overset{\text{wrt.}}{\z} }{\propto} }
+\newcommand{\propzj}{ \underset{ \overset{\text{wrt.}}{\zj} }{\propto} }
+%\newcommand{\constw}{ \underset{ \text{ wrt. \w} }{\text{ const}} }
+%\newcommand{\consty}{ \underset{ \text{ wrt. \y} }{\text{ const}} }
+\newcommand{\const}[1]{{\underset{ \text{ wrt. #1} }{\text{ const}} }}
+
+\newcommand{\tr}[1]{{#1^\top}}
+\newcommand{\inv}[1]{{#1^{-1}}}
+\newcommand{\trk}[1]{{(#1)^\top}}
+\newcommand{\invk}[1]{{(#1)^{-1}}}
+\newcommand{\tin}[1]{{(#1^\top)^{-1}}}
+
+\newcommand{\Yt}{{Y^\top}}
+\newcommand{\Xt}{{X^\top}}
+\newcommand{\hto}{{h^\top}}
+\newcommand{\xt}{{x^\top}}
+\newcommand{\yt}{{\y^\top}}
+\newcommand{\Wt}{{\W^\top}}
+\newcommand{\w}{w}
+\newcommand{\lx}{{\lambda_{x}}}
+\newcommand{\ly}{{\lambda_{y}}}
+\newcommand{\rhi}{{r^{(i)}}}
+\newcommand{\rhj}{{r^{(j)}}}
+\newcommand{\xhi}{{x^{(i)}}}
+\newcommand{\shi}{{s^{(i)}}}
+\newcommand{\xhj}{{x^{(j)}}}
+\newcommand{\shj}{{s^{(j)}}}
+\newcommand{\Wi}{{W_{i}}}
+\newcommand{\Wj}{{W_{j}}}
+\newcommand{\Wit}{W_{i}^\top}
+\newcommand{\Wjt}{W_{j}^\top}
+\newcommand{\Wij}{W_{ij}}
+\newcommand{\Wlk}{W_{lk}}
+\newcommand{\ax}{{\alpha_{x}}}
+\newcommand{\ay}{{\alpha_{y}}}
+\newcommand{\axt}{\alpha_{x}^\top}
+\newcommand{\ayt}{\alpha_{y}^\top}
+\newcommand{\Cxx}{C_{xx}}
+\newcommand{\Cxy}{C_{xy}}
+\newcommand{\Cyx}{C_{yx}} 
+\newcommand{\Cyy}{C_{yy}}
+\newcommand{\1}{\mathds{1}}
+\newcommand{\lag}{\mathcal{L}}
+
+
+\begin{document}
+
+% header configuration
+\title{\b{Exercise Sheet 6}}
+\author{Machine Learning 2, SS16}
+
+\maketitle
+
+% authors
+Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
+
+
+\extitle{Exercise 1 - RBM with Ternary Hidden Units}
+Model: $(x_i \indep x_j | h)$ 
+and $(h_i \indep h_j | x)$ for all $i\neq j$.  
+\\
+\\
+\textbf{(a)} We have to show:
+\begin{gather*}
+	\sum_{h\in\{-1,0,1\}^N} e^{\xt a + \xt Wh + \hto b }
+	\quad \propto \quad
+	e^{\xt a + \sum_{j=1}^N \log({1\over 2} + \cosh(w^\top_j x + b_j)}  
+\end{gather*}
+\begin{proof}
+Devide both sides by $\exp(x^\top a)$ and write down the multiplication by h more explicitly:
+\begin{gather*}
+	\sum_{h\in\{-1,0,1\}^N} e^{\sum_{j=1}^N h_j w_j^\top x + h_j b_j }
+	\quad \propto \quad
+	e^{\sum_{j=1}^N \log({1\over 2} + \cosh(w^\top_j x + b_j)}  
+\end{gather*}
+It follows by laws of exponentiation: 
+\begin{gather*}
+	\sum_{h\in\{-1,0,1\}^N} \prod_{j=1}^N e^{ h_j w_j^\top x + h_j b_j }
+	\quad \propto \quad
+	\cancel{\exp}(\cancel{\log}\prod_{j=1}^N ({1\over 2} + \cosh(w^\top_j x + b_j))  
+\end{gather*} 
+Because the expression $\exp( h_j w_j^\top x + h_j b_j )$ only depends on the j'th component of h, 
+we can rewrite the sum and product to get:
+\begin{gather*}
+	\prod_{j=1}^N \sum_{h_j\in\{-1,0,1\}} e^{ h_j w_j^\top x + h_j b_j }
+	\quad \propto \quad
+	\prod_{j=1}^N {(1 + 2\cosh(w^\top_j x + b_j) ) \over 2} 
+\end{gather*}
+Unfold the three cases on the left side and pull out the constant factor on the right side:
+\begin{gather*}
+	\prod_{j=1}^N \big( e^{w_j^\top x + b_j}  +  e^{-w_j^\top x - b_j}   +  1  \big)
+	\quad \propto \quad
+	{1 \over 2^N}\prod_{j=1}^N (1 + 2\cosh(w^\top_j x + b_j)  )
+\end{gather*}
+Use definition of cosh on the left side:
+\begin{gather*}
+	\prod_{j=1}^N \big( 2\cosh(w^\top_j x + b_j)   +  1  \big)
+	\quad \propto \quad
+	{1 \over 2^N}\prod_{j=1}^N (1 + 2\cosh(w^\top_j x + b_j)  )
+%\quad \qed
+\end{gather*}
+\end{proof}
+\newpage
+\textbf{(c)} \\
+UNDER CONSTRUCTION!
+\\
+$\Pr(x) = {1 \over Z}\prod_{j=1}^N \exp(-W_jx+a^\top x - b_j) + \exp(W_jx + a^\top x + b_j) + \exp(a^\top x)$
+\\
+$\Pr(x) = {1 \over Z}\exp(a^\top x)\prod_{j=1}^N \exp(-W_jx - b_j) + \exp(W_jx + b_j) + 1$
+\begin{gather*}
+	\Pr(x) = \sum_{h\in\{-1,0,1\}^N} e^{\xt a + \xt Wh + \hto b }
+\end{gather*}
+\begin{gather*}
+	\Pr(h_j = -1 \mid x) = {\Pr(h_j = -1, x)\over \Pr(x)} 
+	= 
+	{{1 \over Z}\prod_{j=1}^N \exp(-W_jx+a^\top x - b_j) \over \Pr(x)}
+	=
+	\prod_{j=1}^N \frac{1}{1 + \exp(2W_jx + 2b_j) + \exp(W_jx + b_j)} 
+\end{gather*}
+\begin{gather*}
+	\Pr(h_j = 1 \mid x) = {\Pr(h_j = 1, x)\over \Pr(x)} 
+	= 
+	{{1 \over Z}\prod_{j=1}^N \exp(+W_jx+a^\top x + b_j) \over \Pr(x)}
+	=
+	\prod_{j=1}^N \frac{1}{1 + \exp(-2W_jx - 2b_j) + \exp(-W_jx - b_j)} 
+\end{gather*}
+\begin{gather*}
+	\Pr(h_j = 0 \mid x) = {\Pr(h_j = 0, x)\over \Pr(x)} 
+	= 
+	{{1 \over Z}\prod_{j=1}^N \exp(a^\top x) \over \Pr(x)}
+	=
+	\prod_{j=1}^N \frac{1}{1 + \exp(-W_jx - b_j) + \exp(W_jx + b_j)} 
+\end{gather*}
+\begin{gather*}
+	\Pr(x_i = 0 \mid h) = {\Pr(x_i = 0, h)\over \Pr(h)} =  
+\end{gather*}
+
+\end{document}
+
+
+
+
+
+
+
+
+
