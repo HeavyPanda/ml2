@@ -92,8 +92,7 @@
 
 \newcommand{\Yt}{{Y^\top}}
 \newcommand{\Xt}{{X^\top}}
-\newcommand{\hto}{{h^\top}}
-\newcommand{\xt}{{x^\top}}
+\newcommand{\xt}{{\x^\top}}
 \newcommand{\yt}{{\y^\top}}
 \newcommand{\Wt}{{\W^\top}}
 \newcommand{\w}{w}
@@ -126,7 +125,7 @@
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 6}}
+\title{\b{Exercise Sheet 4}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
@@ -135,65 +134,116 @@
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
 
-\extitle{Exercise 1 - RBM with Ternary Hidden Units}
-Model: $(x_i \indep x_j | h)$ 
-and $(h_i \indep h_j | x)$ for all $i\neq j$.  
-\\
-\\
-\textbf{(a)} We have to show:
+\extitle{Exercise 1 - Sparse Coding}
+\textbf{(a)}
 \begin{gather*}
-	\sum_{h\in\{-1,0,1\}^N} e^{\xt a + \xt Wh + \hto b }
-	\quad \propto \quad
-	e^{\xt a + \sum_{j=1}^N \log({1\over 2} + \cosh(w^\top_j x + b_j)}  
-\end{gather*}
-\begin{proof}
-Devided both sides by $\exp(x^\top a)$ and wrote down the multiplication by h more explicitly:
-\begin{gather*}
-	\sum_{h\in\{-1,0,1\}^N} e^{\sum_{j=1}^N h_j w_j^\top x + h_j b_j }
-	\quad \propto \quad
-	e^{\sum_{j=1}^N \log({1\over 2} + \cosh(w^\top_j x + b_j)}  
-\end{gather*}
-It follows by laws of exponentiation: 
-\begin{gather*}
-	\sum_{h\in\{-1,0,1\}^N} \prod_{j=1}^N e^{ h_j w_j^\top x + h_j b_j }
-	\quad \propto \quad
-	\cancel{\exp}(\cancel{\log}\prod_{j=1}^N ({1\over 2} + \cosh(w^\top_j x + b_j))  
+	{\partial E\over\partial W}
+	=
+	{\partial\over\partial W}\eta |W|_F^2
+	+
+	{\partial\over\partial W} \sum_{i=1}^N (|\xhi - W\shi|^2 +	\lambda |\shi|_1)
+	\\
+	= 
+	\eta\sum_{l}^{d}\sum_{k}^{h}{\partial\over\partial W} (\Wlk)^2
+	+ 
+	\sum_{i=1}^N
+		{\partial\over\partial W}(\xhi - W\shi)^\top (\xhi - W\shi)
+	\\
+	=
+	2\eta W
+	+ 
+	\sum_{i=1}^N
+		-2(\xhi - W\shi)\shi^\top
+	=
+	2\eta W
+	- 
+	2\sum_{i=1}^N
+		(\xhi - W\shi)\shi^\top			
 \end{gather*} 
-This expressions are still equivalent (*):
+\textbf{(b)}
 \begin{gather*}
-	\prod_{j=1}^N \sum_{h_j\in\{-1,0,1\}} e^{ h_j w_j^\top x + h_j b_j }
-	\quad \propto \quad
-	\prod_{j=1}^N {(1 + 2\cosh(w^\top_j x + b_j) ) \over 2} 
-\end{gather*}
-Unfold the three cases on the left side and pull out the constant factor on the right side:
+	{\partial E\over\partial \shi}
+	=
+	{\partial\over\partial \shi}\eta |W|_F^2
+	+
+	{\partial\over\partial \shi} \sum_{j=1}^N (|\xhj - W\shj|^2 +	\lambda |\shj|_1)
+	\\
+	=
+	{\partial\over\partial \shi} (\xhi - W\shi)^\top (\xhi - W\shi) 
+	              +	{\partial\over\partial \shi} \lambda |\shi|_1
+	\\
+	=
+	-2 W^\top(\xhi-W\shi) 
+	              +	\lambda \sum_{k=1}^h {\partial\over\partial \shi}\shi_k 
+	              \quad\quad\text{($\shi_k\geq 0$)}
+	\\
+	=
+	-2 W^\top(\xhi-W\shi) 
+	+	\lambda 1_h	
+\end{gather*} 
+\extitle{Exercise 2 - Sparsifying Non-Linearities}
+\textbf{(a)}
+The derivative wrt. to W is already equivalent. 
+Taking the derivative wrt. $\rhi$ we obtain:
 \begin{gather*}
-	\prod_{j=1}^N \big( e^{w_j^\top x + b_j}  +  e^{-w_j^\top x - b_j}   +  1  \big)
-	\quad \propto \quad
-	{1 \over 2^N}\prod_{j=1}^N (1 + 2\cosh(w^\top_j x + b_j)  )
+	{\partial\over\partial \rhi}\sum_{j=1}^N 
+	(|\xhj - Wg(\rhj)|^2 +	\lambda |\rhj|^2)
+	=
+	{\partial\over\partial \rhi} |\xhi - Wg(\rhj)|^2 
+	+ {\partial\over\partial \rhi} \lambda |\rhi|^2
+	\\
+	= -2 W^\top(\xhi-Wg(\rhi)){\partial\over\partial \rhi}g(\rhi) 
+	+	\lambda 2\rhi	 
 \end{gather*}
-Use definition of cosh on the left side:
-\begin{gather*}
-	\prod_{j=1}^N \big( 2\cosh(w^\top_j x + b_j)   +  1  \big)
-	\quad \propto \quad
-	{1 \over 2^N}\prod_{j=1}^N (1 + 2\cosh(w^\top_j x + b_j)  )
-%\quad \qed
-\end{gather*}
-\end{proof}
+Comparing the factors of $\lambda$ yields componentwise 
+differences by the componentwise factors $2\rhi_k$ $\forall k\in\{1,\ldots,h\}$. In order for 
+the two problems to be equal, we choose g such that it's Jacobian is 
+diagonal and such that it has the k-th of these factors on the k-th diagonal element.  
+Therefore we have an equivalent problem for $g(\rhi) = (\rhi_1^2, \ldots, \rhi_h^2)$.
+\\
+\\
+\textbf{(b)}
+Both, the reconstruction error as well as the sparsity penalty, are 
+convex in both approaches. Since the sum of convex functions is again a convex 
+function we find a global, unique optimum in both problems. 
+Unfortunately, the derivative of the original problem wrt. $s_k$ 
+for $k\in\{1,\ldots,h\}$ does not exist in 0. It is therefore theoretically 
+problematic to use gradient descent on the original problem, even though 
+encountering this problem might be rather unlikely. 
+
 \newpage
-\textbf{(c)} \\
-\\
-$\Pr(x) = {1 \over Z}\prod_{j=1}^N \exp(-W_jx+a^\top x - b_j) + \exp(W_jx + a^\top x + b_j) + \exp(a^\top x)$
-\\
-$\Pr(x) = {1 \over Z}\exp(a^\top x)\prod_{j=1}^N \exp(-W_jx - b_j) + \exp(W_jx + b_j) + 1$
+\extitle{Exercise 3 - Autoencoders}
+\textbf{(a)}
+Focus on the result of (2a), which is ${\partial E\over\partial \rhi}$. 
+Having $\rhi=V^\top\xhi$, by chainrule we get:
 \begin{gather*}
-	\Pr(x) = \sum_{h\in\{-1,0,1\}^N} e^{\xt a + \xt Wh + \hto b }
+{\partial E\over\partial V} 
+= {\partial E\over\partial\rhi} {\partial\rhi\over\partial V}
+= [-2 W^\top(\xhi-Wg(\rhi)){\partial\over\partial \rhi}g(\rhi) +	
+	\lambda 2\rhi] \xhi^\top
+\\
+= [-2 W^\top(\xhi-Wg(V^\top\xhi))g'(V^\top\xhi) +
+	\lambda 2V^\top\xhi] \xhi^\top
 \end{gather*}
-
-
+\\
+\textbf{(b)}
+\\
+(2) Optimizing wrt. $W,s^1,\ldots s^N$ and V is not a convex 
+optimization problem while the approaches in task 1 and 2 are convex. 
+The problem became harder to optimize. 
+\\
+\\
+(1)
+Infering the sources $\rhi$ from $\xhi$ is just the product $V^\top\xhi$ 
+(requires dxh multiplications). This does not endanger the feasibility of this method.
+\\
+\\
+(3)
+Non-convexity (or non-concavity) generally endangers 
+the feasibility of finding a solution. The computation generally becomes 
+either harder or more approximative. In comparison, the 1-layer network 
+is comparatively quick and exact solvable. 
 \end{document}
-
-
-
 
 
 

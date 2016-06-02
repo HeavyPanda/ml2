@@ -1,0 +1,210 @@
+\documentclass[a4paper]{article}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\pagestyle{plain}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usepackage{eurosym}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{dlfltxbcodetips}
+\usepackage{cancel}
+
+%    \usepackage{tkz-graph}  
+%    \usetikzlibrary{shapes.geometric}%   
+% 	 \usetikzlibrary{bayesnet}
+	
+\input{preamble.tex} % import config
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}  
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\vivid}{\stackrel{\text{vivid}}{=}}
+\newcommand{\icol}[1]{% inline column vector
+  \left(\begin{smallmatrix}#1\end{smallmatrix}\right)%
+}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\newcommand{\mlq}{F(\q)}
+\newcommand{\si}{s}
+\newcommand{\sj}{{s'}}
+\newcommand{\p}{p}
+\newcommand{\q}{r}
+\newcommand{\z}{w}
+%\newcommand{\x}{\mathcal{D}}
+%\newcommand{\mlq}{-L(\q)}
+%\newcommand{\si}{i}
+%\newcommand{\sj}{j}
+%\newcommand{\p}{p}
+%\newcommand{\q}{q}
+%\newcommand{\z}{Z}
+%\newcommand{\x}{X}
+
+\newcommand{\pxgz}{\p(\x|\z)}
+\newcommand{\pzgx}{\p(\z|\x)}
+\newcommand{\pxz}{\p(\x,\z)}
+\newcommand{\px}{\p(\x)}
+
+\newcommand{\qz}{\q(\z)}
+\newcommand{\qi}{\q_\si}
+\newcommand{\qj}{\q_\sj}
+\newcommand{\qk}{\q_k}
+\newcommand{\pz}{\p(\z)}
+\newcommand{\pzi}{\p(\z_\si)}
+\newcommand{\pzj}{\p(\z_\sj)}
+\newcommand{\pzk}{\p(\z_k)}
+
+
+
+\newcommand{\zi}{\z_\si}
+\newcommand{\zj}{\z_\sj}
+\newcommand{\zk}{\z_k}
+\newcommand{\dz}{\mathrm{d}\z}
+\newcommand{\dzi}{\mathrm{d}\z_\si}
+\newcommand{\dzj}{\mathrm{d}\z_\sj}
+\newcommand{\dzk}{\mathrm{d}\z_k} 
+
+\newcommand{\E}{\mathbb{E}}
+
+
+
+
+
+%\newcommand{\propq}{ \underset{ \text{wrt.}\put(1,1){\scriptsize *}q }{\propto} }
+
+\newcommand{\eqs}[1]{ \stackrel{#1}{=}  }
+\newcommand{\eqq}{  \overset{\text{!}}{=} }
+\newcommand{\propqz}{ \underset{ \overset{\text{wrt.}}{\qz} }{\propto} }
+\newcommand{\propz}{ \underset{ \overset{\text{wrt.}}{\z} }{\propto} }
+\newcommand{\propzj}{ \underset{ \overset{\text{wrt.}}{\zj} }{\propto} }
+%\newcommand{\constw}{ \underset{ \text{ wrt. \w} }{\text{ const}} }
+%\newcommand{\consty}{ \underset{ \text{ wrt. \y} }{\text{ const}} }
+\newcommand{\const}[1]{{\underset{ \text{ wrt. #1} }{\text{ const}} }}
+
+\newcommand{\tr}[1]{{#1^\top}}
+\newcommand{\inv}[1]{{#1^{-1}}}
+\newcommand{\trk}[1]{{(#1)^\top}}
+\newcommand{\invk}[1]{{(#1)^{-1}}}
+\newcommand{\tin}[1]{{(#1^\top)^{-1}}}
+
+\newcommand{\Yt}{{Y^\top}}
+\newcommand{\Xt}{{X^\top}}
+\newcommand{\xt}{{\x^\top}}
+\newcommand{\yt}{{\y^\top}}
+\newcommand{\Wt}{{\W^\top}}
+\newcommand{\w}{w}
+\newcommand{\lx}{{\lambda_{x}}}
+\newcommand{\ly}{{\lambda_{y}}}
+\newcommand{\rhi}{{r^{(i)}}}
+\newcommand{\rhj}{{r^{(j)}}}
+\newcommand{\xhi}{{x^{(i)}}}
+\newcommand{\shi}{{s^{(i)}}}
+\newcommand{\xhj}{{x^{(j)}}}
+\newcommand{\shj}{{s^{(j)}}}
+\newcommand{\Wi}{{W_{i}}}
+\newcommand{\Wj}{{W_{j}}}
+\newcommand{\Wit}{W_{i}^\top}
+\newcommand{\Wjt}{W_{j}^\top}
+\newcommand{\Wij}{W_{ij}}
+\newcommand{\Wlk}{W_{lk}}
+\newcommand{\ax}{{\alpha_{x}}}
+\newcommand{\ay}{{\alpha_{y}}}
+\newcommand{\axt}{\alpha_{x}^\top}
+\newcommand{\ayt}{\alpha_{y}^\top}
+\newcommand{\Cxx}{C_{xx}}
+\newcommand{\Cxy}{C_{xy}}
+\newcommand{\Cyx}{C_{yx}} 
+\newcommand{\Cyy}{C_{yy}}
+\newcommand{\1}{\mathds{1}}
+\newcommand{\lag}{\mathcal{L}}
+
+
+\begin{document}
+
+% header configuration
+\title{\b{Exercise Sheet 5}}
+\author{Machine Learning 2, SS16}
+
+\maketitle
+
+% authors
+Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
+
+
+\extitle{Exercise 1 - Kernel Eigenvectors}
+\textbf{(a)}\\
+We use Lagrange multipliers:
+\begin{gather*}
+	\lag
+	=
+	v^\top Cv - \lambda(v^\top v - 1) 
+	\\
+	{\partial\lag\over\partial v} 
+	=2(C - \lambda I)v \eqq \textbf{0} 
+	\quad\Longrightarrow\quad Cv\eqq\lambda v
+	\\
+	{\partial\lag\over\partial v^2}
+	=
+	2(C-\lambda I)
+\end{gather*}
+In every matrix C it holds that $eig(C-a I) = (\lambda_i-a)_{i\in\{1,\ldots,d\}}$
+(see eq. 286 in matrix cookbook) 
+where in this case $a=\max(\{\lambda_i\}_{i\in\{1,\ldots,d\}})$. 
+This means that the second order derivative has only negative eigenvalues 
+except for the largest eigenvalue, which is now zero.   
+Hence ${\partial\lag\over\partial v^2}$ is negative semi-definite (think 
+of the bilinearform of combinations of eigenvectors, 
+which correspond to the largest eigenvalue). 
+We therefore use another simple criterion, namely using 
+$v^\top v = 1$ and the necessary condition $Cv\eqq\lambda v$ in 
+our objective function $v^\top C v$:
+\begin{gather*}
+	\max_v v^\top C v 
+	=
+	\max(\{v^\top C v\}_{v})
+	=
+	\max(\{v^\top \lambda_i v\}_{v,i})
+	= 
+	\max(\{\lambda_i\}_{i\in\{1,\ldots,d\}})
+\end{gather*} 
+Since the necessary condition wrt. $v^\top v=1$ describes an eigenvalue problem,
+both cases are equivalent.  
+\\
+\\
+\textbf{(b)}\\
+\begin{gather*}
+	\lambda v = Cv 
+	\quad\Longleftrightarrow\quad
+	v = {Cv\over\lambda} 
+	\quad\stackrel{\text{def. C}}{\Longleftrightarrow}\quad
+	v = \sum_{i=1}^N \phi(x_i)\underbrace{\phi(x_i)^\top v\over\lambda}_{\alpha_i} 
+\end{gather*} 
+Comparing the coefficients with the given equation
+$v=\Phi^\top\alpha=\sum_{i=1}^N\phi(x_i)\alpha_i$, we get:
+\begin{equation}
+	{\phi(x_i)^\top v\over\lambda} = \alpha_i
+	\quad\Longleftrightarrow\quad
+	\phi(x_i)^\top v = \lambda\alpha_i
+	\quad\Longleftrightarrow\quad
+	\Phi v = \lambda\alpha
+\end{equation}
+We now conclude:
+\begin{gather*}
+	K\alpha = \Phi\Phi^\top\alpha = \Phi v \stackrel{(1)}{=} \lambda\alpha 
+\end{gather*}
+
+\extitle{Exercise 2}
+Define \[ s:=(s_i)_{i=1,...,N}\] and the matrix of eigenvectors \[ U:=(u^T_i)_{i=1,...,N}. \]
+Then \[ Uy=s. \]
+Because all eigenvectors are orthogonal, $U$ is an orthogonal matrix. This means in particular, that \[||Uy||^2_2=||y||^2_2. \] 
+All in all we get \[ \sum_{i=1}^{N}s_i^2=||s||^2_2=||Uy||^2_2=||y||^2_2 \]
+\end{document}
+
+
+
+
+
+
