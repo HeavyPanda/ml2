@@ -156,16 +156,42 @@ p_{\theta}(x)&=\frac{1}{Z}\exp(x^Ta)\prod_{i=1}^{N}\sum_{h\in\{-1,0,1\}}\exp(y_i
 \end{align*}
 \begin{align*}
 &=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(2(\frac{1}{2}+cosh(w_ix-b_i))))\\
-&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(2)+(\frac{1}{2}+cosh(w_ix-b_i)))\\
-&=\frac{1}{Z}\exp(N\log(2)+x^Ta+\sum_{i=1}^{N}(\frac{1}{2}+cosh(w_ix-b_i)))\\
-&=\frac{1}{Z}2^N\exp(x^Ta+\sum_{i=1}^{N}(\frac{1}{2}+cosh(w_ix-b_i)))\\
+&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(2)+\log(\frac{1}{2}+cosh(w_ix-b_i)))\\
+&=\frac{1}{Z}\exp(N\log(2)+x^Ta+\sum_{i=1}^{N}\log(\frac{1}{2}+cosh(w_ix-b_i)))\\
+&=\frac{1}{Z}2^N\exp(x^Ta+\sum_{i=1}^{N}\log(\frac{1}{2}+cosh(w_ix-b_i)))\\
 \end{align*}
 With \[ Z':=\frac{2^N}{Z} \]
 the desired result follows.\\
 \textbf{(b)}\\
 First compute gradients of $F$:
 \begin{align*}
-\bigtriangledown_aF
+\bigtriangledown_{a_i}F(x)=\bigtriangledown_{a_i}-a^Tx=-x_i
+\end{align*}
+\begin{align*}
+\bigtriangledown_{b_j}F(x)&=-\sum_{k=1}^{N}\bigtriangledown_{b_j}\log(\frac{1}{2}+cosh(w_kx-b_k))\\
+&=-\bigtriangledown_{b_j}\log(\frac{1}{2}+cosh(w_jx-b_j))\\
+&=-\frac{1}{\frac{1}{2}+cosh(w_kx-b_k)}\bigtriangledown_{b_j}cosh(w_jx-b_j)\\
+&=-\frac{1}{\frac{1}{2}+cosh(w_kx-b_k)}sinh(w_jx-b_j)\bigtriangledown_{b_j}b_j\\
+&=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}
+\end{align*}
+\begin{align*}
+\bigtriangledown_{w_{ij}}F(x)&=-\sum_{k=1}^{N}\bigtriangledown_{w_{ij}}\log(\frac{1}{2}+cosh(w_kx-b_k))\\
+&=-\bigtriangledown_{w_{ij}}\log(\frac{1}{2}+cosh(w_jx-b_j))\\
+&=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}\bigtriangledown_{w_{ij}}(w_j^Tx)\\
+&=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i
+\end{align*}
+Now we can plug the gradients into the expectations:
+\begin{align*}
+\bigtriangledown_{a_i}KL(\hat{p}||p_{\theta})&=<-x_i>_{\hat{p}}-<-x_i>_{p_{\theta}}\\
+&=
+\end{align*}
+\begin{align*}
+\bigtriangledown_{b_j}KL(\hat{p}||p_{\theta})&=<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}>_{\hat{p}}-<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}>_{p_{\theta}}\\
+&=
+\end{align*}
+\begin{align*}
+\bigtriangledown_{w_{ij}}KL(\hat{p}||p_{\theta})&=<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{\hat{p}}-<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{p_{\theta}}\\
+&=
 \end{align*}
 \end{document}
 
