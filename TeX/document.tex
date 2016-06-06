@@ -180,18 +180,21 @@ First compute gradients of $F$:
 &=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}\bigtriangledown_{w_{ij}}(w_j^Tx)\\
 &=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i
 \end{align*}
-Now we can plug the gradients into the expectations:
+Now we can plug the gradients into the expectations:\\
+To compute the expectations with respect to the empirical distribution, we consider observed data points $x^{(1)},...,x^{(n)}$
 \begin{align*}
 \bigtriangledown_{a_i}KL(\hat{p}||p_{\theta})&=<-x_i>_{\hat{p}}-<-x_i>_{p_{\theta}}\\
-&=
+&=\sum_{x\in\{0,1\}^d}x_ip_{\theta}(x)-<x_i>_{\hat{p}}\\
+&=\sum_{x\in\{0,1\}^d}x_ip_{\theta}(x)-\frac{1}{n}\sum_{k=1}^{n}x^{(k)}_i\\
+&=\frac{1}{Z'}\sum_{x\in\{0,1\}^d}x_i\exp(-F_{\theta}(x))-\frac{1}{n}\sum_{k=1}^{n}x^{(k)}_i\\
 \end{align*}
 \begin{align*}
 \bigtriangledown_{b_j}KL(\hat{p}||p_{\theta})&=<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}>_{\hat{p}}-<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}>_{p_{\theta}}\\
-&=
+&=\frac{1}{Z'}\sum_{x\in\{0,1\}^d}\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}\exp(-F_{\theta}(x))-\frac{1}{n}\sum_{k=1}^{n}\frac{sinh(w_jx^{(k)}-b_j)}{\frac{1}{2}+cosh(w_kx^{(k)}-b_k)}\\
 \end{align*}
 \begin{align*}
 \bigtriangledown_{w_{ij}}KL(\hat{p}||p_{\theta})&=<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{\hat{p}}-<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{p_{\theta}}\\
-&=
+&=\frac{1}{Z'}\sum_{x\in\{0,1\}^d}\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i\exp(-F_{\theta}(x))-\frac{1}{n}\sum_{k=1}^{n}\frac{sinh(w_jx^{(k)}-b_j)}{\frac{1}{2}+cosh(w_kx^{(k)}-b_k)}x^{(k)}_i\\
 \end{align*}
 \end{document}
 
