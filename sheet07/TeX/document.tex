@@ -1,0 +1,147 @@
+\documentclass[a4paper]{article}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\pagestyle{plain}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usepackage{eurosym}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{dlfltxbcodetips}
+\usepackage{cancel}
+
+%    \usepackage{tkz-graph}  
+%    \usetikzlibrary{shapes.geometric}%   
+% 	 \usetikzlibrary{bayesnet}
+	
+\input{preamble.tex} % import config
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}  
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\vivid}{\stackrel{\text{vivid}}{=}}
+\newcommand{\icol}[1]{% inline column vector
+  \left(\begin{smallmatrix}#1\end{smallmatrix}\right)%
+}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\newcommand{\mlq}{F(\q)}
+\newcommand{\si}{s}
+\newcommand{\sj}{{s'}}
+\newcommand{\p}{p}
+\newcommand{\q}{r}
+\newcommand{\z}{w}
+%\newcommand{\x}{\mathcal{D}}
+%\newcommand{\mlq}{-L(\q)}
+%\newcommand{\si}{i}
+%\newcommand{\sj}{j}
+%\newcommand{\p}{p}
+%\newcommand{\q}{q}
+%\newcommand{\z}{Z}
+%\newcommand{\x}{X}
+
+\newcommand{\pxgz}{\p(\x|\z)}
+\newcommand{\pzgx}{\p(\z|\x)}
+\newcommand{\pxz}{\p(\x,\z)}
+\newcommand{\px}{\p(\x)}
+
+\newcommand{\qz}{\q(\z)}
+\newcommand{\qi}{\q_\si}
+\newcommand{\qj}{\q_\sj}
+\newcommand{\qk}{\q_k}
+\newcommand{\pz}{\p(\z)}
+\newcommand{\pzi}{\p(\z_\si)}
+\newcommand{\pzj}{\p(\z_\sj)}
+\newcommand{\pzk}{\p(\z_k)}
+
+
+
+\newcommand{\zi}{\z_\si}
+\newcommand{\zj}{\z_\sj}
+\newcommand{\zk}{\z_k}
+\newcommand{\dz}{\mathrm{d}\z}
+\newcommand{\dzi}{\mathrm{d}\z_\si}
+\newcommand{\dzj}{\mathrm{d}\z_\sj}
+\newcommand{\dzk}{\mathrm{d}\z_k} 
+
+\newcommand{\E}{\mathbb{E}}
+
+
+
+
+
+%\newcommand{\propq}{ \underset{ \text{wrt.}\put(1,1){\scriptsize *}q }{\propto} }
+
+\newcommand{\eqs}[1]{ \stackrel{#1}{=}  }
+\newcommand{\eqq}{  \overset{\text{!}}{=} }
+\newcommand{\propqz}{ \underset{ \overset{\text{wrt.}}{\qz} }{\propto} }
+\newcommand{\propz}{ \underset{ \overset{\text{wrt.}}{\z} }{\propto} }
+\newcommand{\propzj}{ \underset{ \overset{\text{wrt.}}{\zj} }{\propto} }
+%\newcommand{\constw}{ \underset{ \text{ wrt. \w} }{\text{ const}} }
+%\newcommand{\consty}{ \underset{ \text{ wrt. \y} }{\text{ const}} }
+\newcommand{\const}[1]{{\underset{ \text{ wrt. #1} }{\text{ const}} }}
+
+\newcommand{\tr}[1]{{#1^\top}}
+\newcommand{\inv}[1]{{#1^{-1}}}
+\newcommand{\trk}[1]{{(#1)^\top}}
+\newcommand{\invk}[1]{{(#1)^{-1}}}
+\newcommand{\tin}[1]{{(#1^\top)^{-1}}}
+
+\newcommand{\Yt}{{Y^\top}}
+\newcommand{\Xt}{{X^\top}}
+\newcommand{\xt}{{\x^\top}}
+\newcommand{\yt}{{\y^\top}}
+\newcommand{\Wt}{{\W^\top}}
+\newcommand{\w}{w}
+\newcommand{\lx}{{\lambda_{x}}}
+\newcommand{\ly}{{\lambda_{y}}}
+\newcommand{\rhi}{{r^{(i)}}}
+\newcommand{\rhj}{{r^{(j)}}}
+\newcommand{\xhi}{{x^{(i)}}}
+\newcommand{\shi}{{s^{(i)}}}
+\newcommand{\xhj}{{x^{(j)}}}
+\newcommand{\shj}{{s^{(j)}}}
+\newcommand{\Wi}{{W_{i}}}
+\newcommand{\Wj}{{W_{j}}}
+\newcommand{\Wit}{W_{i}^\top}
+\newcommand{\Wjt}{W_{j}^\top}
+\newcommand{\Wij}{W_{ij}}
+\newcommand{\Wlk}{W_{lk}}
+\newcommand{\ax}{{\alpha_{x}}}
+\newcommand{\ay}{{\alpha_{y}}}
+\newcommand{\axt}{\alpha_{x}^\top}
+\newcommand{\ayt}{\alpha_{y}^\top}
+\newcommand{\Cxx}{C_{xx}}
+\newcommand{\Cxy}{C_{xy}}
+\newcommand{\Cyx}{C_{yx}} 
+\newcommand{\Cyy}{C_{yy}}
+\newcommand{\1}{\mathds{1}}
+\newcommand{\lag}{\mathcal{L}}
+
+
+\begin{document}
+
+% header configuration
+\title{\b{Exercise Sheet 7}}
+\author{Machine Learning 2, SS16}
+
+\maketitle
+
+% authors
+Sascha Huk, 321249;\quad Jeney, 348969;\quad Mario Tambos, 380599;\quad Viktor Jan Tinapp, 0380549\\
+
+
+\extitle{Exercise 1 - Weighted Degree Kernels}
+\textbf{(a)}\\
+The weighted degree kernel seeks to incorporate the assumption that identical substrings in the same position of the two gene sequences have some special significance, and that subsequences of different length are differently important (depending on the particular choice of the $\beta_m$ parameters).
+
+\end{document}
+
+
+
+
+
+
