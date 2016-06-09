@@ -57,7 +57,7 @@
 \newcommand{\pzj}{\p(\z_\sj)}
 \newcommand{\pzk}{\p(\z_k)}
 
-
+\newcommand{\sigm}{\text{sigm}}
 
 \newcommand{\zi}{\z_\si}
 \newcommand{\zj}{\z_\sj}
@@ -196,6 +196,97 @@ To compute the expectations with respect to the empirical distribution, we consi
 \bigtriangledown_{w_{ij}}KL(\hat{p}||p_{\theta})&=<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{\hat{p}}-<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{p_{\theta}}\\
 &=\frac{1}{Z'}\sum_{x\in\{0,1\}^d}\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i\exp(-F_{\theta}(x))-\frac{1}{n}\sum_{k=1}^{n}\frac{sinh(w_jx^{(k)}-b_j)}{\frac{1}{2}+cosh(w_kx^{(k)}-b_k)}x^{(k)}_i\\
 \end{align*}
+\textbf{(c)} \\
+The independence model is $(x_i \indep x_j \mid h)$ and $(h_i \indep h_j \mid x)$ for all $i\neq j$:   
+\begin{gather*}
+p(h \mid x) \stackrel{\text{Model}}{=} \prod_{j=1}^N {\Pr}_j(h_j \mid x)  
+\end{gather*}
+
+\begin{gather*}
+p(h \mid x) = {p(h, x) \over p(x)} 
+= 
+\frac{\cancel{{1\over Z} e^{x^\top a}}\prod_j e^{h_jw_j^\top x + h_j b_j} }
+{\cancel{{1\over Z} e^{x^\top a}}\prod_j (e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1)}
+\stackrel{\text{Model}}{=}
+\frac{\prod_j {\Pr}_j(h_j, x)}{\prod_j {\Pr}_j(x)}
+=
+\prod_j {\Pr}_j(h_j \mid x)
+\end{gather*}
+\begin{gather*}
+\Longrightarrow
+{\Pr}_j(h_j \mid x)
+=
+\frac{{\Pr}_j(h_j, x)}{{\Pr}_j(x)}
+=
+\frac{e^{h_jw^\top_jx + h_jb_j}} {\sum_{h_j} e^{h_jw^\top_jx + h_jb_j}}
+=
+\frac{e^{h_jw_j^\top x + h_j b_j} }
+{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
+\end{gather*}
+This is kind of a softmax function.
+\begin{gather*}
+{\Pr}_j(h_j = 1 \mid x)  
+= 
+\frac{e^{w_j^\top x + b_j} }
+{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
+=
+\frac{1}{1 + \exp(-2w_jx - 2b_j) + \exp(-w_jx - b_j)} 
+\end{gather*}
+\begin{gather*}
+{\Pr}_j(h_j = -1 \mid x) 
+= 
+\frac{e^{-w_j^\top x - b_j} }
+{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
+=
+\frac{1}{\exp(2w_jx + 2b_j) + 1 + \exp(w_jx + b_j)} 
+\end{gather*}
+\begin{gather*}
+{\Pr}_j(h_j = 0 \mid x)  
+= 
+\frac{1 }
+{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
+=
+\frac{1}{\exp(w_jx + b_j) +  \exp(-w_jx - b_j) + 1 }
+\end{gather*}
+\\
+\\
+\\
+\begin{gather*}
+p(x \mid h) \stackrel{\text{Model}}{=} \prod_{k=1}^d {\Pr}_k(x_k \mid h)  
+\end{gather*}
+
+\begin{gather*}
+p(x \mid h) = {p(x, h) \over p(h)} 
+= 
+\frac{\cancel{{1\over Z} e^{h^\top b}}\prod_k e^{x_ka_k + x_kw_k^\top h} }
+{\cancel{{1\over Z} e^{h^\top b}}\prod_k (1 + e^{a_k + w_k^\top h})}
+\stackrel{\text{Model}}{=}
+\frac{\prod_k {\Pr}_k(x_k, h)}{\prod_k {\Pr}_k(h)}
+=
+\prod_k {\Pr}_k(x_k \mid h)
+\end{gather*}
+
+
+\begin{gather*}
+\Pr(x_k = 1 \mid h) 
+=
+\frac{e^{a_k + w_k^\top h} }
+{1 + e^{a_k + w_k^\top h}}
+=
+\frac{1}
+{e^{-a_k - w_k^\top h} + 1}
+= 
+\sigm(a_k + w_k^\top h)
+\end{gather*}
+
+\begin{gather*}
+\Pr(x_k = 0 \mid h) 
+=
+\frac{1}
+{1 + e^{a_k + w_k^\top h}}
+=
+\sigm(- a_k - w_k^\top h)
+\end{gather*}
 \end{document}
 
 
