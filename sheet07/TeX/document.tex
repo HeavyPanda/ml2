@@ -138,6 +138,42 @@ Sascha Huk, 321249;\quad Jeney, 348969;\quad Mario Tambos, 380599;\quad Viktor J
 \textbf{(a)}\\
 The weighted degree kernel seeks to incorporate the assumption that identical substrings in the same position of the two gene sequences have some special significance, and that subsequences of different length are differently important (depending on the particular choice of the $\beta_m$ parameters).
 
+\textbf{(b)}\\
+Define everything in matrix notation in the following way:
+\begin{align*}
+K&=[k(x_i,x_j)]_{i=1,...,K,j=1,...,K}\\
+I(m,n)&=[I(u_{m,n}(x_i)=u_{m,n}(x_j))]_{i=1,...,K,j=1,...,K}
+\end{align*}
+Then we have to show, that for every $\alpha\in\mathbb{R}^K$ 
+\begin{align*}
+0&\leq\sum_{i,j=1}^{K}\alpha_i\alpha_jk(x_i,x_j)\\
+&=\alpha^TK\alpha\\
+&=\alpha^T\left(\sum_{m=1}^{M}\beta_m\sum_{n=1}^{N-m+1}I(m,n)\right)\alpha\\
+&=\sum_{m=1}^{M}\beta_m\sum_{n=1}^{N-m+1}\alpha^TI(m,n)\alpha
+\end{align*}
+Because all the $\beta_i,i=1,...,M$ are nonnegative and arbitrary, this is equivalent to
+\begin{align*}
+0\leq\alpha^TI(n,m)\alpha.
+\end{align*}
+Now look at the form of the matrix $I(n,m)$. The diagonal is $1$, as well as the entries $(k,l)$ and $(l,k)$, if $u_{m,n}(x_k)=u_{m,n}(x_l)$. All other entries are zero.\\
+So define the set of entries, where $u_{m,n}(x_k)=u_{m,n}(x_l)$ and $k<l$ as $S(m,n)$ and define the matrices
+\begin{align*}
+[A(k,l)]_{i=1,...K,j=1,...,K}:=\begin{cases}
+1 &,(i,j)=(k,l) or (i,j)=(l,k)\\
+0 &,otherwise
+\end{cases}
+\end{align*}
+Then the matrix $I(m,n)$ can be decomposed as a sum of the identity matrix $E$ and the previously defined matrices:
+\begin{align*}
+I(m,n)=E+\sum_{(k,l)\in S(m,n)}A(k,l),
+\end{align*}
+which leads to
+\begin{align*}
+\alpha^TI(m,n)\alpha&=\alpha^TE\alpha+\sum_{(k,l)\in S(m,n)}\alpha^TA(k,l)\alpha\\
+&=\alpha^T\alpha+\sum_{(k,l)\in S(m,n)}\alpha^TA(k,l)\alpha\\
+&=\alpha^T\alpha+2\sum_{(k,l)\in S(m,n)}\alpha_k\alpha_l\\
+&\geq 0
+\end{align*}
 \end{document}
 
 
