@@ -151,11 +151,11 @@ Then we have to show, that for every $\alpha\in\mathbb{R}^K$
 &=\alpha^T\left(\sum_{m=1}^{M}\beta_m\sum_{n=1}^{N-m+1}I(m,n)\right)\alpha\\
 &=\sum_{m=1}^{M}\beta_m\sum_{n=1}^{N-m+1}\alpha^TI(m,n)\alpha
 \end{align*}
-Because all the $\beta_i,i=1,...,M$ are nonnegative and arbitrary, this is equivalent to
+Because all the $\beta_i,i=1,...,M$ are nonnegative and arbitrary, the following condition is sufficient:
 \begin{align*}
 0\leq\alpha^TI(n,m)\alpha.
 \end{align*}
-Now look at the form of the matrix $I(n,m)$. The diagonal is $1$, as well as the entries $(k,l)$ and $(l,k)$, if $u_{m,n}(x_k)=u_{m,n}(x_l)$. All other entries are zero.\\
+for every $m=1,..,M,n=1,...,N-m+1$. Now look at the form of the matrix $I(n,m)$. The diagonal is $1$, as well as the entries $(k,l)$ and $(l,k)$, if $u_{m,n}(x_k)=u_{m,n}(x_l)$. All other entries are zero.\\
 So define the set of entries, where $u_{m,n}(x_k)=u_{m,n}(x_l)$ and $k<l$ as $S(m,n)$ and define the matrices
 \begin{align*}
 [A(k,l)]_{i=1,...K,j=1,...,K}:=\begin{cases}
@@ -171,8 +171,20 @@ which leads to
 \begin{align*}
 \alpha^TI(m,n)\alpha&=\alpha^TE\alpha+\sum_{(k,l)\in S(m,n)}\alpha^TA(k,l)\alpha\\
 &=\alpha^T\alpha+\sum_{(k,l)\in S(m,n)}\alpha^TA(k,l)\alpha\\
-&=\alpha^T\alpha+2\sum_{(k,l)\in S(m,n)}\alpha_k\alpha_l\\
-&\geq 0
+&=\sum_{i=1,...,K}\alpha^2_i+\sum_{(k,l)\in S(m,n)}2\alpha_k\alpha_l\\
+&=\sum_{(k,l)\in S(m,n)}\left(\alpha_k^2+2\alpha_k\alpha_l+\alpha^2_l\right)+\sum_{i\in R}\alpha^2_i\\
+&=\sum_{(k,l)\in S(m,n)}(\alpha_k+\alpha_l)^2+\sum_{i\in R}\alpha^2_i\\
+\end{align*}
+where $R$ is defined as the set of $i=1,..,K$, for which $(i,j)$ and $(j,i)$ are never in $S(m,n)$ (for any choice of $j$).(So all indexes, that where taken into the first sum)\\
+Now we have a sum of squares, which is nonegative. Hooray!\\
+So to conclude, we have for every $\alpha\in\mathbb{R}^K$ and every $m=1,...,M,n=1,...,N-m+1$:
+\begin{align*}
+\alpha^TI(m,n)\alpha\geq 0,
+\end{align*}
+which gives us
+\begin{align*}
+\sum_{i,j=1}^{K}\alpha_i\alpha_jk(x_i,x_j)
+=\alpha^TK\alpha\geq 0
 \end{align*}
 \end{document}
 
