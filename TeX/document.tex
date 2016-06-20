@@ -11,7 +11,7 @@
 \usepackage{mathrsfs}
 \usepackage{dlfltxbcodetips}
 \usepackage{cancel}
-
+\usepackage{bbm}
 %    \usepackage{tkz-graph}  
 %    \usetikzlibrary{shapes.geometric}%   
 % 	 \usetikzlibrary{bayesnet}
@@ -125,7 +125,7 @@
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 6}}
+\title{\b{Exercise Sheet 8}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
@@ -134,159 +134,64 @@
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
 
-\extitle{Exercise 1}
+\extitle{Exercise 2}
+\begin{align*}
+y_t=(w\ast x)_t=\sum_{s\in\mathbb{Z}}w_sx_{t-s}
+\end{align*}
 \textbf{(a)}\\
-Define
-\[ y:=x^TW-b^T \]
 \begin{align*}
-p_{\theta}(x)&=\sum_{h\in\{-1,0,1\}^N}p(x,h)\\
-&=\sum_{h\in\{-1,0,1\}^N}\frac{1}{Z}\exp(yh+x^Ta)\\
-&=\frac{1}{Z}\exp(x^Ta)\sum_{h\in\{-1,0,1\}^N}\exp(yh)\\
-&=\frac{1}{Z}\exp(x^Ta)\sum_{h\in\{-1,0,1\}^N}\exp(\sum_{i=1}^{N}y_ih_i)\\
-&=\frac{1}{Z}\exp(x^Ta)\sum_{h\in\{-1,0,1\}^N}\prod_{i=1}^{N}\exp(y_ih_i)\\
+\frac{\partial E}{\partial x_k}
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial y_t}{\partial x_k}\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial}{\partial x_k}(w\ast x)_t\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}}w_s\frac{\partial}{\partial x_k}x_{t-s}\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}}w_s\mathbbm{1}_{\{t-s=k\}}\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}w_{-k+t}\\
+&=\left[\frac{\partial E}{\partial y}\star w\right]_{-k}
 \end{align*}
-Because the expression $\exp(y_ih_i)$ only depends on the i'th component of h, we can rewrite the sum and product to get:
-\begin{align*}
-p_{\theta}(x)&=\frac{1}{Z}\exp(x^Ta)\prod_{i=1}^{N}\sum_{h\in\{-1,0,1\}}\exp(y_ih_i)\\
-&=\frac{1}{Z}\exp(x^Ta)\exp(\log(\prod_{i=1}^{N}\sum_{h\in\{-1,0,1\}}\exp(y_ih_i)))\\
-&=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(\sum_{h\in\{-1,0,1\}}\exp(y_ih_i)))\\
-&=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(1+e^{y_i}+e^{-y_i}))\\
-&=\frac{1}{Z}\exp(x^Ta)\exp(\sum_{i=1}^{N}\log(1+2cosh(y_i)))\\
-&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(1+2cosh(w_ix-b_i)))\\
-\end{align*}
-\begin{align*}
-&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(2(\frac{1}{2}+cosh(w_ix-b_i))))\\
-&=\frac{1}{Z}\exp(x^Ta+\sum_{i=1}^{N}\log(2)+\log(\frac{1}{2}+cosh(w_ix-b_i)))\\
-&=\frac{1}{Z}\exp(N\log(2)+x^Ta+\sum_{i=1}^{N}\log(\frac{1}{2}+cosh(w_ix-b_i)))\\
-&=\frac{1}{Z}2^N\exp(x^Ta+\sum_{i=1}^{N}\log(\frac{1}{2}+cosh(w_ix-b_i)))\\
-\end{align*}
-With \[ Z':=\frac{2^N}{Z} \]
-the desired result follows.\\
 \textbf{(b)}\\
-First compute gradients of $F$:
 \begin{align*}
-\bigtriangledown_{a_i}F(x)=\bigtriangledown_{a_i}-a^Tx=-x_i
+\frac{\partial E}{\partial w_k}
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial y_t}{\partial w_k}\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial}{\partial w_k}(w\ast x)_t\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}} x_{t-s}\frac{\partial}{\partial w_k}w_s\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}}x_{t-s}\mathbbm{1}_{\{s=k\}}\\
+&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}x_{-k+t}\\
+&=\left[\frac{\partial E}{\partial y}\star x\right]_{-k}
 \end{align*}
+\extitle{Exercise 3}
+\textbf{(a)}\\
+Euler discretization gives us for every $j=1,..,d$:
 \begin{align*}
-\bigtriangledown_{b_j}F(x)&=-\sum_{k=1}^{N}\bigtriangledown_{b_j}\log(\frac{1}{2}+cosh(w_kx-b_k))\\
-&=-\bigtriangledown_{b_j}\log(\frac{1}{2}+cosh(w_jx-b_j))\\
-&=-\frac{1}{\frac{1}{2}+cosh(w_kx-b_k)}\bigtriangledown_{b_j}cosh(w_jx-b_j)\\
-&=-\frac{1}{\frac{1}{2}+cosh(w_kx-b_k)}sinh(w_jx-b_j)\bigtriangledown_{b_j}b_j\\
-&=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}
+x^t_j-x^{t-1}_j=0.1(\tanh(\sum_{i=1}^{d}x^{t-1}_i w_{ij}+b_j)-x^{t-1}_j)
 \end{align*}
+The transition function is then component wise defined as
 \begin{align*}
-\bigtriangledown_{w_{ij}}F(x)&=-\sum_{k=1}^{N}\bigtriangledown_{w_{ij}}\log(\frac{1}{2}+cosh(w_kx-b_k))\\
-&=-\bigtriangledown_{w_{ij}}\log(\frac{1}{2}+cosh(w_jx-b_j))\\
-&=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}\bigtriangledown_{w_{ij}}(w_j^Tx)\\
-&=-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i
+\Theta(x)_j=0.1(\tanh(\sum_{i=1}^{d}x_i w_{ij}+b_j)-x_j)+x_j
 \end{align*}
-Now we can plug the gradients into the expectations:\\
-To compute the expectations with respect to the empirical distribution, we consider observed data points $x^{(1)},...,x^{(n)}$
-\begin{align*}
-\bigtriangledown_{a_i}KL(\hat{p}||p_{\theta})&=<-x_i>_{\hat{p}}-<-x_i>_{p_{\theta}}\\
-&=\sum_{x\in\{0,1\}^d}x_ip_{\theta}(x)-<x_i>_{\hat{p}}\\
-&=\sum_{x\in\{0,1\}^d}x_ip_{\theta}(x)-\frac{1}{n}\sum_{k=1}^{n}x^{(k)}_i\\
-&=\frac{1}{Z'}\sum_{x\in\{0,1\}^d}x_i\exp(-F_{\theta}(x))-\frac{1}{n}\sum_{k=1}^{n}x^{(k)}_i\\
-\end{align*}
-\begin{align*}
-\bigtriangledown_{b_j}KL(\hat{p}||p_{\theta})&=<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}>_{\hat{p}}-<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}>_{p_{\theta}}\\
-&=\frac{1}{Z'}\sum_{x\in\{0,1\}^d}\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}\exp(-F_{\theta}(x))-\frac{1}{n}\sum_{k=1}^{n}\frac{sinh(w_jx^{(k)}-b_j)}{\frac{1}{2}+cosh(w_kx^{(k)}-b_k)}\\
-\end{align*}
-\begin{align*}
-\bigtriangledown_{w_{ij}}KL(\hat{p}||p_{\theta})&=<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{\hat{p}}-<-\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i>_{p_{\theta}}\\
-&=\frac{1}{Z'}\sum_{x\in\{0,1\}^d}\frac{sinh(w_jx-b_j)}{\frac{1}{2}+cosh(w_kx-b_k)}x_i\exp(-F_{\theta}(x))-\frac{1}{n}\sum_{k=1}^{n}\frac{sinh(w_jx^{(k)}-b_j)}{\frac{1}{2}+cosh(w_kx^{(k)}-b_k)}x^{(k)}_i\\
-\end{align*}
-\textbf{(c)} \\
-The independence model is $(x_i \indep x_j \mid h)$ and $(h_i \indep h_j \mid x)$ for all $i\neq j$:   
-\begin{gather*}
-p(h \mid x) \stackrel{\text{Model}}{=} \prod_{j=1}^N {\Pr}_j(h_j \mid x)  
-\end{gather*}
 
-\begin{gather*}
-p(h \mid x) = {p(h, x) \over p(x)} 
-= 
-\frac{\cancel{{1\over Z} e^{x^\top a}}\prod_j e^{h_jw_j^\top x + h_j b_j} }
-{\cancel{{1\over Z} e^{x^\top a}}\prod_j (e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1)}
-\stackrel{\text{Model}}{=}
-\frac{\prod_j {\Pr}_j(h_j, x)}{\prod_j {\Pr}_j(x)}
-=
-\prod_j {\Pr}_j(h_j \mid x)
-\end{gather*}
-\begin{gather*}
-\Longrightarrow
-{\Pr}_j(h_j \mid x)
-=
-\frac{{\Pr}_j(h_j, x)}{{\Pr}_j(x)}
-=
-\frac{e^{h_jw^\top_jx + h_jb_j}} {\sum_{h_j} e^{h_jw^\top_jx + h_jb_j}}
-=
-\frac{e^{h_jw_j^\top x + h_j b_j} }
-{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
-\end{gather*}
-This is kind of a softmax function.
-\begin{gather*}
-{\Pr}_j(h_j = 1 \mid x)  
-= 
-\frac{e^{w_j^\top x + b_j} }
-{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
-=
-\frac{1}{1 + \exp(-2w_jx - 2b_j) + \exp(-w_jx - b_j)} 
-\end{gather*}
-\begin{gather*}
-{\Pr}_j(h_j = -1 \mid x) 
-= 
-\frac{e^{-w_j^\top x - b_j} }
-{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
-=
-\frac{1}{\exp(2w_jx + 2b_j) + 1 + \exp(w_jx + b_j)} 
-\end{gather*}
-\begin{gather*}
-{\Pr}_j(h_j = 0 \mid x)  
-= 
-\frac{1 }
-{e^{w_j^\top x + b_j} + e^{-w_j^\top x - b_j} + 1}
-=
-\frac{1}{\exp(w_jx + b_j) +  \exp(-w_jx - b_j) + 1 }
-\end{gather*}
-\\
-\\
-\\
-\begin{gather*}
-p(x \mid h) \stackrel{\text{Model}}{=} \prod_{k=1}^d {\Pr}_k(x_k \mid h)  
-\end{gather*}
-
-\begin{gather*}
-p(x \mid h) = {p(x, h) \over p(h)} 
-= 
-\frac{\cancel{{1\over Z} e^{h^\top b}}\prod_k e^{x_ka_k + x_kw_k^\top h} }
-{\cancel{{1\over Z} e^{h^\top b}}\prod_k (1 + e^{a_k + w_k^\top h})}
-\stackrel{\text{Model}}{=}
-\frac{\prod_k {\Pr}_k(x_k, h)}{\prod_k {\Pr}_k(h)}
-=
-\prod_k {\Pr}_k(x_k \mid h)
-\end{gather*}
-
-
-\begin{gather*}
-\Pr(x_k = 1 \mid h) 
-=
-\frac{e^{a_k + w_k^\top h} }
-{1 + e^{a_k + w_k^\top h}}
-=
-\frac{1}
-{e^{-a_k - w_k^\top h} + 1}
-= 
-\sigm(a_k + w_k^\top h)
-\end{gather*}
-
-\begin{gather*}
-\Pr(x_k = 0 \mid h) 
-=
-\frac{1}
-{1 + e^{a_k + w_k^\top h}}
-=
-\sigm(- a_k - w_k^\top h)
-\end{gather*}
+\textbf{(c)}\\
+\begin{align*}
+\frac{\partial x^t_i}{\partial x^{t-1}_j}
+&=0.1\frac{\partial}{\partial x^{t-1}_j}(\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i)-x^{t-1}_i)+\frac{\partial x^{t-1}_i}{\partial x^{t-1}_j}\\
+&=0.1\frac{\partial}{\partial x^{t-1}_j}(\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))+0.9\mathbbm{1}_{\{i=j\}}\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}\frac{\partial}{\partial x^{t-1}_j}x^{t-1}_k w_{ki}+0.9\mathbbm{1}_{\{i=j\}}\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}\mathbbm{1}_{\{k=j\}} w_{ki}+0.9\mathbbm{1}_{\{i=j\}}\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))w_{ji}+0.9\mathbbm{1}_{\{i=j\}}\\
+\end{align*}
+\textbf{(d)}\\
+\begin{align*}
+\frac{\partial x^t_i}{\partial b_j}
+&=0.1\frac{\partial}{\partial b_j}\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i)\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\frac{\partial b_i}{\partial b_j}\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\mathbbm{1}_{\{i=j\}}\\
+\end{align*}
+\begin{align*}
+\frac{\partial x^t_i}{\partial w_{jl}}
+&=0.1\frac{\partial}{\partial w_{jl}}\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i)\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}x^{t-1}_k\frac{\partial}{\partial w_{jl}}w_{ki}\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}x^{t-1}_k\mathbbm{1}_{\{j=k\}}\mathbbm{1}_{\{l=i\}}\\
+&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))x^{t-1}_j\mathbbm{1}_{\{l=i\}}\\
+\end{align*}
 \end{document}
 
 
