@@ -12,6 +12,7 @@
 \usepackage{dlfltxbcodetips}
 \usepackage{cancel}
 \usepackage{bbm}
+\usepackage{graphicx}
 %    \usepackage{tkz-graph}  
 %    \usetikzlibrary{shapes.geometric}%   
 % 	 \usetikzlibrary{bayesnet}
@@ -169,7 +170,12 @@ The transition function is then component wise defined as
 \Theta(x)_j=0.1(\tanh(\sum_{i=1}^{d}x_i w_{ij}+b_j)-x_j)+x_j
 \end{align*}
 
-\textbf{(c)}\\
+\textbf{(b)}\\
+\includegraphics[width=0.7\textwidth]{nnet}\\
+\includegraphics[width=0.7\textwidth]{nnet_time_step}
+\\
+
+\textbf{(c)}\\if you
 \begin{align*}
 \frac{\partial x^t_i}{\partial x^{t-1}_j}
 &=0.1\frac{\partial}{\partial x^{t-1}_j}(\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i)-x^{t-1}_i)+\frac{\partial x^{t-1}_i}{\partial x^{t-1}_j}\\
