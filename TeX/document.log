@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2016.5.27)  6 JUN 2016 23:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2016.5.27)  20 JUN 2016 19:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -429,6 +429,13 @@ Package: dlfltxbcodetips 2010/03/04 v0.5 by Lars 'daleif' Madsen
 )
 (c:/texlive/2015/texmf-dist/tex/latex/cancel/cancel.sty
 Package: cancel 2013/04/12 v2.2 Cancel math terms
+)
+(c:/texlive/2015/texmf-dist/tex/latex/bbm-macros/bbm.sty
+Package: bbm 1999/03/15 V 1.2 provides fonts for set symbols - TH
+LaTeX Font Info:    Overwriting math alphabet `\mathbbm' in version `bold'
+(Font)                  U/bbm/m/n --> U/bbm/bx/n on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathbbmss' in version `bold'
+(Font)                  U/bbmss/m/n --> U/bbmss/bx/n on input line 35.
 ) (./preamble.tex
 (c:/texlive/2015/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2015/03/17 v1.2c Input encoding file
@@ -953,54 +960,60 @@ Underfull \hbox (badness 10000) in paragraph at lines 134--135
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--142
+
+ []
+
+LaTeX Font Info:    Try loading font information for U+bbm on input line 150.
+(c:/texlive/2015/texmf-dist/tex/latex/bbm-macros/ubbm.fd
+File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
+)
+Underfull \hbox (badness 10000) in paragraph at lines 150--152
+
+ []
+
 [1
 
-{c:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-
-Package amsmath Warning: Foreign command \over;
-(amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 214.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 250--254
+{c:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 250--254
+Underfull \hbox (badness 10000) in paragraph at lines 180--182
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 250--254
-
- []
-
-[3] (./document.aux) ) 
+[2] (./document.aux) ) 
 Here is how much of TeX's memory you used:
- 13573 strings out of 493027
- 258938 string characters out of 6137684
- 319814 words of memory out of 5000000
- 16808 multiletter control sequences out of 15000+600000
- 12492 words of font info for 51 fonts, out of 8000000 for 9000
+ 13612 strings out of 493027
+ 259839 string characters out of 6137684
+ 312985 words of memory out of 5000000
+ 16837 multiletter control sequences out of 15000+600000
+ 12887 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,19n,54p,414b,198s stack positions out of 5000i,500n,10000p,200000b,80000s
-<c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
-pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/t
-exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/20
-15/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2015/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2015/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr7.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
-.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/t
-exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/201
-5/texmf-dist/fonts/type1/public/amsfonts/latxfont/line10.pfb>
-Output written on document.pdf (3 pages, 131664 bytes).
+ 55i,9n,54p,414b,198s stack positions out of 5000i,500n,10000p,200000b,80000s
+ <c:/Users/X201/.texlive2015/texmf-var/fonts/pk/ljfour/pu
+blic/bbm/bbm10.600pk><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmbx10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.p
+fb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/te
+xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/201
+5/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2015/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2015/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr7.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmsy10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.
+pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on document.pdf (2 pages, 102655 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 50 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 46 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
