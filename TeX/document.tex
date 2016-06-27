@@ -160,23 +160,50 @@ Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad J
 		edge [lightedge] node[auto,swap] {0.6} (s2);
 		\end{tikzpicture}
 	\end{center}
-	\caption{Here $s_1$ and $s_2$ are the hidden states and $y_1$ and $y_2$ are the visible states.}
 \end{figure}
-
+Here $s_1$ and $s_2$ are the hidden states and $y_1$ and $y_2$ are the visible states.
 
 
 \extitle{Exercise 1b}
-In this experiment someone, who cannot be seen, flips one of two coins (we call them visible coins) and tells you the outcome. He decides, which coin to flip by flipping one of two different coins(hidden coins). Of course the outcome of these is not told to you. The hidden coin he uses next always only depends on the last outcome of the hidden coin. If you had heads the last time(with the hidden coin), he will use hidden coin 1 the next time and if he had tails, he will use hidden coin 2. The probability of having heads with hidden coin 1 is 0.1 and the probability of having heads with hidden coin 2 is 0.5.\\
+In this experiment someone, who cannot be seen, flips one of two coins (we call them visible coins) and tells you the outcome. He decides, which coin to flip by flipping one of two different coins(hidden coins). Of course the outcome of these is not told to you. The hidden coin he uses next always only depends on the last outcome of the hidden coin. If he had heads the last time(with the hidden coin), he will use hidden coin 1 the next time and if he had tails, he will use hidden coin 2. The probability of having heads with hidden coin 1 is 0.1 and the probability of having heads with hidden coin 2 is 0.5.\\
 The rules for the visible coin toss are: If the hidden coin shows heads, he will flip visible coin 1. If the visible coin shows tails, he will flip visible coin 2. For visible coin 1 the probability of having heads is 0.2. For visible coin 2 the probability of having heads is 0.4.\\
+In the end you, as the observer, will only see the outcome of the visible coin toss, not knowing, which coin it is or which hidden coin was flipped.
 
 \extitle{Exercise 1c}
+First note, that $q_1$ is the initial state, which is almost surely "heads", since $\Pi$ assigns mass 1 to "heads". So actually there are almost surely only two possible vectors $(q_1,q_2)=(heads,heads)$ and $(q_1,q_2)=(heads,tails)$. We define the set of these two vectors now as $\tilde{S}$.\\
+Now let's compute some probabilities, that we will need later on:
 \begin{align*}
-\mathbb{P}[(q_1,q_2)|(O_1,O_2)=(tails,tails)]&=\frac{\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]}{\mathbb{P}[(O_1,O_2)=(tails,tails)]}
+\mathbb{P}[(q_1,q_2)=(heads,heads)]&=0.1\\
+\mathbb{P}[(q_1,q_2)=(heads,tails)]&=0.9\\
 \end{align*}
+\begin{align*}
+\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)=(heads,heads)]&=\mathbb{P}[O_1=tails|q_1=heads]\times\mathbb{P}[O_2=tails|q_2=heads]\\
+&=0.8\times 0.8\\
+&=0.64\\
+\end{align*}
+\begin{align*}
+\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)=(heads,tails)]&=\mathbb{P}[O_1=tails|q_1=heads]\times\mathbb{P}[O_2=tails|q_2=tails]\\
+&=0.8\times 0.6\\
+&=0.48\\
+\end{align*}
+Using these results we can compute following probability, which we will use for Bayes formula:
 \begin{align*}
 \mathbb{P}[(O_1,O_2)=(tails,tails)]
 &=\sum_{(q_1,q_2)\in S^2}\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]\\
-&=
+&=\sum_{(q_1,q_2)\in \tilde{S}}\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]\\
+&=0.1\times 0.64+0.9\times 0.48\\
+&=0.496
+\end{align*}
+Now we can compute the desired expression with Bayes formula:
+\begin{align*}
+\mathbb{P}[(q_1,q_2)|(O_1,=O_2)=(tails,tails)]=\frac{\mathbb{P}[(O_1,=O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]}{\mathbb{P}[(O_1,=O_2)=(tails,tails)]}
+\end{align*}
+Plugging in the numerical values for the two scenarios in $\tilde{S}$ respectively yields:
+\begin{align*}
+\mathbb{P}[(q_1,q_2)=(heads,heads)|(O_1,=O_2)&=\frac{0.64\times 0.1}{0.496}\\
+&=0.129\\
+\mathbb{P}[(q_1,q_2)=(heads,tails)|(O_1,=O_2)&=\frac{0.48\times 0.9}{0.496}\\
+&=0.871\\
 \end{align*}
 \end{document}
 
