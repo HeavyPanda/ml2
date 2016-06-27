@@ -126,7 +126,7 @@
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 8}}
+\title{\b{Exercise Sheet 9}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
@@ -134,69 +134,49 @@
 % authors
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
+\extitle{Exercise 1a}
+\tikzstyle{state}=[shape=circle,draw=blue!50,fill=blue!20]
+\tikzstyle{observation}=[shape=rectangle,draw=orange!50,fill=orange!20]
+\tikzstyle{lightedge}=[<-,dotted]
+\tikzstyle{mainstate}=[state,thick]
+\tikzstyle{mainedge}=[<-,thick]
 
-\extitle{Exercise 2}
-\begin{align*}
-y_t=(w\ast x)_t=\sum_{s\in\mathbb{Z}}w_sx_{t-s}
-\end{align*}
-\textbf{(a)}\\
-\begin{align*}
-\frac{\partial E}{\partial x_k}
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial y_t}{\partial x_k}\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial}{\partial x_k}(w\ast x)_t\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}}w_s\frac{\partial}{\partial x_k}x_{t-s}\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}}w_s\mathbbm{1}_{\{t-s=k\}}\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}w_{-k+t}\\
-&=\left[\frac{\partial E}{\partial y}\star w\right]_{-k}
-\end{align*}
-\textbf{(b)}\\
-\begin{align*}
-\frac{\partial E}{\partial w_k}
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial y_t}{\partial w_k}\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\frac{\partial}{\partial w_k}(w\ast x)_t\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}} x_{t-s}\frac{\partial}{\partial w_k}w_s\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}\sum_{s\in\mathbb{Z}}x_{t-s}\mathbbm{1}_{\{s=k\}}\\
-&=\sum_{t\in\mathbb{Z}}\frac{\partial E}{\partial y_t}x_{-k+t}\\
-&=\left[\frac{\partial E}{\partial y}\star x\right]_{-k}
-\end{align*}
-\extitle{Exercise 3}
-\textbf{(a)}\\
-Euler discretization gives us for every $j=1,..,d$:
-\begin{align*}
-x^t_j-x^{t-1}_j=0.1(\tanh(\sum_{i=1}^{d}x^{t-1}_i w_{ij}+b_j)-x^{t-1}_j)
-\end{align*}
-The transition function is then component wise defined as
-\begin{align*}
-\Theta(x)_j=0.1(\tanh(\sum_{i=1}^{d}x_i w_{ij}+b_j)-x_j)+x_j
-\end{align*}
+\begin{figure}[htbp]
+	\begin{center}
+		\begin{tikzpicture}[]
+		% states
+		\node[state] (s1) at (0,2) {$s_1$}
+		edge [loop above]  node[left,swap] {0.1} (s1);
+		\node[state] (s2) at (4,2) {$s_2$}
+		edge [<-,bend right=45] node[auto] {0.9} (s1)
+		edge [->,bend left=45] node[auto,swap] {0.5} (s1)
+		edge [loop above] node[right,swap] {0.5} (s2);
+		% observations
+		\node[observation] (y1) at (2,4) {$y_1$}
+		edge [lightedge] node[auto,swap] {0.2} (s1)
+		edge [lightedge] node[auto] {0.4} (s2);
+		\node[observation] (y2) at (2,0) {$y_2$}
+		edge [lightedge] node[auto] {0.8} (s1)
+		edge [lightedge] node[auto,swap] {0.6} (s2);
+		\end{tikzpicture}
+	\end{center}
+	\caption{Here $s_1$ and $s_2$ are the hidden states and $y_1$ and $y_2$ are the visible states.}
+\end{figure}
 
-\textbf{(b)}\\
-\includegraphics[width=0.7\textwidth]{nnet}\\
-\includegraphics[width=0.7\textwidth]{nnet_time_step}
-\\
 
-\textbf{(c)}\\if you
+
+\extitle{Exercise 1b}
+In this experiment someone, who cannot be seen, flips one of two coins (we call them visible coins) and tells you the outcome. He decides, which coin to flip by flipping one of two different coins(hidden coins). Of course the outcome of these is not told to you. The hidden coin he uses next always only depends on the last outcome of the hidden coin. If you had heads the last time(with the hidden coin), he will use hidden coin 1 the next time and if he had tails, he will use hidden coin 2. The probability of having heads with hidden coin 1 is 0.1 and the probability of having heads with hidden coin 2 is 0.5.\\
+The rules for the visible coin toss are: If the hidden coin shows heads, he will flip visible coin 1. If the visible coin shows tails, he will flip visible coin 2. For visible coin 1 the probability of having heads is 0.2. For visible coin 2 the probability of having heads is 0.4.\\
+
+\extitle{Exercise 1c}
 \begin{align*}
-\frac{\partial x^t_i}{\partial x^{t-1}_j}
-&=0.1\frac{\partial}{\partial x^{t-1}_j}(\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i)-x^{t-1}_i)+\frac{\partial x^{t-1}_i}{\partial x^{t-1}_j}\\
-&=0.1\frac{\partial}{\partial x^{t-1}_j}(\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))+0.9\mathbbm{1}_{\{i=j\}}\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}\frac{\partial}{\partial x^{t-1}_j}x^{t-1}_k w_{ki}+0.9\mathbbm{1}_{\{i=j\}}\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}\mathbbm{1}_{\{k=j\}} w_{ki}+0.9\mathbbm{1}_{\{i=j\}}\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))w_{ji}+0.9\mathbbm{1}_{\{i=j\}}\\
-\end{align*}
-\textbf{(d)}\\
-\begin{align*}
-\frac{\partial x^t_i}{\partial b_j}
-&=0.1\frac{\partial}{\partial b_j}\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i)\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\frac{\partial b_i}{\partial b_j}\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\mathbbm{1}_{\{i=j\}}\\
+\mathbb{P}[(q_1,q_2)|(O_1,O_2)=(tails,tails)]&=\frac{\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]}{\mathbb{P}[(O_1,O_2)=(tails,tails)]}
 \end{align*}
 \begin{align*}
-\frac{\partial x^t_i}{\partial w_{jl}}
-&=0.1\frac{\partial}{\partial w_{jl}}\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i)\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}x^{t-1}_k\frac{\partial}{\partial w_{jl}}w_{ki}\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))\sum_{k=1}^{d}x^{t-1}_k\mathbbm{1}_{\{j=k\}}\mathbbm{1}_{\{l=i\}}\\
-&=0.1(1-\tanh(\sum_{k=1}^{d}x^{t-1}_k w_{ki}+b_i))x^{t-1}_j\mathbbm{1}_{\{l=i\}}\\
+\mathbb{P}[(O_1,O_2)=(tails,tails)]
+&=\sum_{(q_1,q_2)\in S^2}\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]\\
+&=
 \end{align*}
 \end{document}
 
