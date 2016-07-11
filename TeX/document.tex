@@ -176,10 +176,15 @@ Let $x,x'\in \mathcal{X}$ be two arbitrary samples.
 \end{gather*}
 $\phi(x)^\top$ and $\phi(x')$ are block partitioned matrices, 
 i.e. the $\phi_l's$ are simply concatenated 
-together in one very long vector. So, the result is: $\phi(x) = \begin{bmatrix}
-	\sqrt{\beta_1} \phi_1(x)	& \dots	& \sqrt{\beta_L} \phi_L(x)      
-\end{bmatrix}^\top$.
-
+together in one very long vector. So, the result is: 
+\begin{gather*}
+	\phi(x) = 
+	\begin{bmatrix}
+		\sqrt{\beta_1} \phi_1(x)	\\
+		\dots	\\
+		\sqrt{\beta_L} \phi_L(x)      
+	\end{bmatrix}
+\end{gather*}
 \end{document}
 
 
