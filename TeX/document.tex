@@ -13,6 +13,7 @@
 \usepackage{cancel}
 \usepackage{bbm}
 \usepackage{graphicx}
+
 %    \usepackage{tkz-graph}  
 %    \usetikzlibrary{shapes.geometric}%   
 % 	 \usetikzlibrary{bayesnet}
@@ -35,6 +36,7 @@
 \newcommand{\p}{p}
 \newcommand{\q}{r}
 \newcommand{\z}{w}
+\newcommand{\e}{\textbf{e}}
 %\newcommand{\x}{\mathcal{D}}
 %\newcommand{\mlq}{-L(\q)}
 %\newcommand{\si}{i}
@@ -135,7 +137,7 @@
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
 \extitle{Exercise 1a}
-Let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
+For arbitrary n let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
 and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
 \begin{gather*}
 	\bigforall_{l=1}^L. \sum_{i,j=1}^n v_i v_j k_l(x_i, x_j) \geq 0 
@@ -184,6 +186,45 @@ together in one very long vector. So, the result is:
 		\dots	\\
 		\sqrt{\beta_L} \phi_L(x)      
 	\end{bmatrix}
+\end{gather*}
+\newpage 
+\extitle{Exercise 2a}
+We also encode the classes via the canonical base vectors 
+$\e_y$ for all $y\in \{1,\ldots,C\}$.
+For arbitrary n let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
+and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
+\begin{gather*}
+	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \geq 0
+	\Longrightarrow
+	\sum_{c=1}^C \sum_{i,j=1}^n v_i v_j k(x_i,x_j) ??? (\e_y)_c (\e_{y'})_c \geq 0
+	\ldots
+\end{gather*}
+
+\extitle{Exercise 2b}
+We also encode the classes via the canonical base vectors 
+$\e_y$ for all $y\in \{1,\ldots,C\}$.
+\begin{gather*}
+	k(x,x')\mathbbm{1}_{[y=y']}
+	=
+	\phi(x)^\top \phi(x') \e^\top_y \e_{y'}
+	%=
+	%\e_{y}^\top (\phi(x)^\top \phi(x')) \e_{y'}
+	=
+	\sum_{i=1}^h\phi_{i}(x)\phi_{i}(x')\sum_{c=1}^C(\e_y)_c (\e_{y'})_c
+	=
+	\sum_{i=1}^h\sum_{c=1}^C\phi_{i}(x)\phi_{i}(x') (\e_y)_c (\e_{y'})_c
+	\\
+	=
+	\sum_{c=1}^C \sum_{i=1}^h \phi_{i}(x)(\e_y)_c \phi_{i}(x') (\e_{y'})_c 	
+	=
+	(
+	\underbrace{
+		(\phi(x)\times(\e_y))\mathbbm{\vec{1}}_C 
+	}_{\phi_{\text{struct}}(x,y)}
+	)^\top
+	\underbrace{
+	(\phi(x')\times(\e_{y'}))\mathbbm{\vec{1}}_C
+	}_{\phi_{\text{struct}}(x',y')}
 \end{gather*}
 \end{document}
 
