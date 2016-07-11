@@ -194,25 +194,24 @@ $\e_y$ for all $y\in \{1,\ldots,C\}$.
 For arbitrary n let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
 and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
 \begin{gather*}
-	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \mathbbm{1}_{[y=y']}
+	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \mathbbm{1}_{[y_i=y_j]}
 	=
-	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \e_y^\top \e_{y'} 
+	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \e^\top_{y_i} \e_{y_j} 
 	\\
 	%=
 	%\sum_{i,j=1}^n v_i v_j \sum_k a_{ik}a_{jk} \e_y^\top \e_{y'}
 	=
-	\sum_{i,j} v_i v_j \phi(x_i)^\top \phi(x_j) \e_y^\top \e_{y'}
+	\sum_{i,j} v_i v_j \phi(x_i)^\top \phi(x_j) \e^\top_{y_i} \e_{y_j}
 	=
-	\sum_{i,j} v_i v_j \sum_k \phi(x_i)_k \phi(x_j)_k \e_y^\top \e_{y'}
+	\sum_{i,j} v_i v_j \sum_{k} \phi(x_i)_k \phi(x_j)_k \sum_{l}(\e_{y_i})_l (\e_{y_j})_l
 	\\
 	=
-	\sum_k \sum_{i,j} v_i v_j \phi(x_i)_k \phi(x_j)_k \e_y^\top \e_{y'}
+	\sum_{k,l} \sum_{i,j} v_i v_j \phi(x_i)_k \phi(x_j)_k (\e_{y_i})_l (\e_{y_j})_l
 	=
-	\sum_k \underbrace{(\sum_{i} v_i \phi(x_i)_k) (\sum_{j}v_j \phi(x_j)_k)}_{\text{sums are equal}} 
-	\e_y^\top \e_{y'}
+	\sum_{k,l} \underbrace{(\sum_{i} v_i \phi(x_i)_k (\e_{y_i})_l  ) (\sum_{j}v_j \phi(x_j)_k (\e_{y_j})_l  )}_{\text{sums are equal}} 
 	\\
 	=
-	\sum_k \underbrace{(\sum_{i} v_i \phi(x_i)_k)^2}_{\geq 0}  \underbrace{\e_y^\top \e_{y'}}_{\geq 0}
+	\sum_{k,l} \underbrace{(\sum_{i} v_i \phi(x_i)_k (\e_{y_i})_l  )^2}_{\geq 0} 
 	\geq 0
 \end{gather*}
 
