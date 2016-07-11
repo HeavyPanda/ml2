@@ -121,12 +121,12 @@
 \newcommand{\Cyy}{C_{yy}}
 \newcommand{\1}{\mathds{1}}
 \newcommand{\lag}{\mathcal{L}}
-
+\newcommand\bigforall{\mbox{\Large $\mathsurround0pt\forall$}} 
 
 \begin{document}
 
 % header configuration
-\title{\b{Exercise Sheet 9}}
+\title{\b{Exercise Sheet 10}}
 \author{Machine Learning 2, SS16}
 
 \maketitle
@@ -135,76 +135,50 @@
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
 \extitle{Exercise 1a}
-\tikzstyle{state}=[shape=circle,draw=blue!50,fill=blue!20]
-\tikzstyle{observation}=[shape=rectangle,draw=orange!50,fill=orange!20]
-\tikzstyle{lightedge}=[<-,dotted]
-\tikzstyle{mainstate}=[state,thick]
-\tikzstyle{mainedge}=[<-,thick]
-
-\begin{figure}[htbp]
-	\begin{center}
-		\begin{tikzpicture}[]
-		% states
-		\node[state] (s1) at (0,2) {$s_1$}
-		edge [loop above]  node[left,swap] {0.1} (s1);
-		\node[state] (s2) at (4,2) {$s_2$}
-		edge [<-,bend right=45] node[auto] {0.9} (s1)
-		edge [->,bend left=45] node[auto,swap] {0.5} (s1)
-		edge [loop above] node[right,swap] {0.5} (s2);
-		% observations
-		\node[observation] (y1) at (2,4) {$y_1$}
-		edge [lightedge] node[auto,swap] {0.2} (s1)
-		edge [lightedge] node[auto] {0.4} (s2);
-		\node[observation] (y2) at (2,0) {$y_2$}
-		edge [lightedge] node[auto] {0.8} (s1)
-		edge [lightedge] node[auto,swap] {0.6} (s2);
-		\end{tikzpicture}
-	\end{center}
-\end{figure}
-Here $s_1$ and $s_2$ are the hidden states and $y_1$ and $y_2$ are the visible states.
-
+Let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
+and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
+\begin{gather*}
+	\bigforall_{l=1}^L. \sum_{i,j=1}^n v_i v_j k_l(x_i, x_j) \geq 0 
+	\Longrightarrow
+	\sum_{l=1}^L\sum_{i,j=1}^n v_i v_j k_l(x_i, x_j) \geq 0
+	\Longrightarrow
+	\sum_{i,j=1}^n v_i v_j \sum_{l=1}^L k_l(x_i, x_j) \geq 0 \\
+	\stackrel{\vec{\beta}\geqq 0}{\Longrightarrow}
+	\sum_{i,j=1}^n v_i v_j \sum_{l=1}^L \beta_l k_l(x_i, x_j) \geq 0
+	\stackrel{\text{Def. k}}{\Longrightarrow}
+	\sum_{i,j=1}^n v_i v_j k(x_i, x_j) \geq 0	
+\end{gather*}
+We could also proof this for all pairs of datapoints $x, x'$ out of $\mathcal{X}$, but then the unfold of the 
+definition of positive definiteness wouldn't be that lucid.
 
 \extitle{Exercise 1b}
-In this experiment someone, who cannot be seen, flips one of two coins (we call them visible coins) and tells you the outcome. He decides, which coin to flip by flipping one of two different coins(hidden coins). Of course the outcome of these is not told to you. The hidden coin he uses next always only depends on the last outcome of the hidden coin. If he had heads the last time(with the hidden coin), he will use hidden coin 1 the next time and if he had tails, he will use hidden coin 2. The probability of having heads with hidden coin 1 is 0.1 and the probability of having heads with hidden coin 2 is 0.5.\\
-The rules for the visible coin toss are: If the hidden coin shows heads, he will flip visible coin 1. If the visible coin shows tails, he will flip visible coin 2. For visible coin 1 the probability of having heads is 0.2. For visible coin 2 the probability of having heads is 0.4.\\
-In the end you, as the observer, will only see the outcome of the visible coin toss, not knowing, which coin it is or which hidden coin was flipped.
+Let $x,x'\in \mathcal{X}$ be two arbitrary samples.
+\begin{gather*}
+	\sum_{l=1}^L \beta_l k_l(x,x') 
+	= 
+	\sum_{l=1}^L \beta_l \phi_l(x)^\top \phi_l(x') 
+	=
+	\sum_{l=1}^L (\sqrt{\beta_l} \phi_l(x)^\top) (\sqrt{\beta_l} \phi_l(x'))
+	\\
+	=
+\underbrace{
+\begin{bmatrix}
+	\sqrt{\beta_1} \phi_1(x)	& \dots	& \sqrt{\beta_L} \phi_L(x)      
+\end{bmatrix}
+}_{\phi(x)^\top}
+\underbrace{
+\begin{bmatrix}
+	\sqrt{\beta_1} \phi_1(x')	\\
+	\dots	\\
+	\sqrt{\beta_L} \phi_L(x')      
+\end{bmatrix}
+}_{\phi(x')}
+\end{gather*}
+$\phi(x)^\top$ and $\phi(x')$ are block partitioned matrices, i.e. the $\phi_l's$ are simply concatenated 
+together in one very long vector. So, the result is: $\phi(x) = \begin{bmatrix}
+	\sqrt{\beta_1} \phi_1(x)	& \dots	& \sqrt{\beta_L} \phi_L(x)      
+\end{bmatrix}^\top$.
 
-\extitle{Exercise 1c}
-First note, that $q_1$ is the initial state, which is almost surely "heads", since $\Pi$ assigns mass 1 to "heads". So actually there are almost surely only two possible vectors $(q_1,q_2)=(heads,heads)$ and $(q_1,q_2)=(heads,tails)$. We define the set of these two vectors now as $\tilde{S}$.\\
-Now let's compute some probabilities, that we will need later on:
-\begin{align*}
-\mathbb{P}[(q_1,q_2)=(heads,heads)]&=0.1\\
-\mathbb{P}[(q_1,q_2)=(heads,tails)]&=0.9\\
-\end{align*}
-\begin{align*}
-\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)=(heads,heads)]&=\mathbb{P}[O_1=tails|q_1=heads]\times\mathbb{P}[O_2=tails|q_2=heads]\\
-&=0.8\times 0.8\\
-&=0.64\\
-\end{align*}
-\begin{align*}
-\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)=(heads,tails)]&=\mathbb{P}[O_1=tails|q_1=heads]\times\mathbb{P}[O_2=tails|q_2=tails]\\
-&=0.8\times 0.6\\
-&=0.48\\
-\end{align*}
-Using these results we can compute following probability, which we will use for Bayes formula:
-\begin{align*}
-\mathbb{P}[(O_1,O_2)=(tails,tails)]
-&=\sum_{(q_1,q_2)\in S^2}\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]\\
-&=\sum_{(q_1,q_2)\in \tilde{S}}\mathbb{P}[(O_1,O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]\\
-&=0.1\times 0.64+0.9\times 0.48\\
-&=0.496
-\end{align*}
-Now we can compute the desired expression with Bayes formula:
-\begin{align*}
-\mathbb{P}[(q_1,q_2)|(O_1,=O_2)=(tails,tails)]=\frac{\mathbb{P}[(O_1,=O_2)=(tails,tails)|(q_1,q_2)]\mathbb{P}[(q_1,q_2)]}{\mathbb{P}[(O_1,=O_2)=(tails,tails)]}
-\end{align*}
-Plugging in the numerical values for the two scenarios in $\tilde{S}$ respectively yields:
-\begin{align*}
-\mathbb{P}[(q_1,q_2)=(heads,heads)|(O_1,=O_2)&=\frac{0.64\times 0.1}{0.496}\\
-&=0.129\\
-\mathbb{P}[(q_1,q_2)=(heads,tails)|(O_1,=O_2)&=\frac{0.48\times 0.9}{0.496}\\
-&=0.871\\
-\end{align*}
 \end{document}
 
 
