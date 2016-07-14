@@ -136,120 +136,97 @@
 % authors
 Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
 
-\extitle{Exercise 1a}
-For arbitrary n let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
-and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
+\extitle{Exercise 1}
+The Lagrangian of the given primal problem is: 
 \begin{gather*}
-	\bigforall_{l=1}^L. \sum_{i,j=1}^n v_i v_j k_l(x_i, x_j) \geq 0 
+	\lag(R,c,\xi,\alpha,\lambda) = R^2 + {1\over n \nu}\sum_i \xi_i
+	- \sum_i \alpha_i ( R^2 + \xi_i - \norm{\phi(x_i)-c}  )
+	- \sum_i \lambda_i \xi_i
+	\\
+	=
+	R^2 + {1\over n\nu}\sum_i \xi_i
+	- \sum_i \alpha_i ( R^2 + \xi_i - (\phi(x_i)^\top\phi(x_i) + c^\top c - 2c^\top\phi(x_i))  )
+	- \sum_i \lambda_i \xi_i
+	\\
+	=
+	R^2 + {1\over n\nu}\sum_i \xi_i
+	- \sum_i \alpha_i ( R^2 + \xi_i - \phi(x_i)^\top\phi(x_i) - c^\top c + 2c^\top\phi(x_i) )
+	- \sum_i \lambda_i \xi_i	
+\end{gather*}
+We now differentiate w.r.t. primal variables $R,c,\xi$: 
+\begin{gather*}
+	{\partial\over\partial R}\lag(R,c,\xi,\alpha,\lambda) 
+	=
+	2R-2R\sum_i\alpha_i \eqq 0 
+	\quad\quad\Longrightarrow\quad\quad
+	\sum_i \alpha_i = 1
+	\\
+	{\partial\over\partial c}\lag(R,c,\xi,\alpha,\lambda) 
+	=
+	2c\sum_i\alpha_i - 2\sum_i\alpha_i\phi(x_i) \eqq 0
+	\quad\quad\Longrightarrow\quad\quad
+	c = \sum_i\alpha_i\phi(x_i) 
+	\\
+	{\partial\over\partial \xi_i}\lag(R,c,\xi,\alpha,\lambda) 
+	=
+	{1\over n\nu} - \alpha_i - \lambda_i \eqq 0
+	\quad\quad\Longrightarrow\quad\quad
+	{1\over n\nu} = \alpha_i + \lambda_i
+\end{gather*}
+The Lagrangian of the dual problem then can be obtained by plugging in the derived results: 
+\begin{gather*}
+	\lag(\alpha, \lambda )
+	=
+	R^2 + {1\over n\nu}\sum_i \xi_i
+	- \sum_i \alpha_i ( R^2 + \xi_i - \phi(x_i)^\top\phi(x_i) - c^\top c + 2c^\top\phi(x_i) )
+	- \sum_i \lambda_i \xi_i
+	\\
+	=
+	\cancel{R^2} + {1\over n\nu}\sum_i \xi_i
+	- \cancel{R^2} \underbrace{\cancel{\sum_i \alpha_i}}_{1}
+	- \sum_i \alpha_i \xi_i
+	+ \sum_i \alpha_i k(x_i,x_i)
+	+ c^\top c \underbrace{\sum_i \alpha_i}_{1} 
+	- 2c^\top \sum_i \alpha_i \phi(x_i)
+	- \sum_i \lambda_i \xi_i
+	\\
+	=
+	\cancel{{1\over n\nu}\sum_i \xi_i}
+	- \cancel{\sum_i \underbrace{(\alpha_i + \lambda_i)}_{1\over n\nu} \xi_i}
+	+ \sum_i \alpha_i k(x_i,x_i)
+	+ c^\top c 
+	- 2c^\top\underbrace{\sum_i \alpha_i \phi(x_i)}_{c}
+	\\
+	=
+	\sum_i \alpha_i k(x_i,x_i)
+	- c^\top c 
+\end{gather*}
+Lastly, by using the definition of b, we obtain the dual program:
+\begin{gather*}
+	\max_\alpha \sum_i \alpha_i k(x_i,x_i) - \sum_i\sum_j\alpha_i\alpha_j k(x_i,x_j)
+	\\
+	%\quad\quad\text{s.t.} \quad\quad
+	\text{s.t.} \quad\quad
+	\sum_i\alpha_i = 1
+	\quad\text{and} \quad
+	\alpha_i \geq 0
+	\quad\text{and} \quad
+	\lambda_i \geq 0
+	\quad\text{and} \quad
+	\alpha_i + \lambda_i = {1\over n\nu}
+	\\
 	\Longrightarrow
-	\sum_{l=1}^L\sum_{i,j=1}^n v_i v_j k_l(x_i, x_j) \geq 0
-	\Longrightarrow
-	\sum_{i,j=1}^n v_i v_j \sum_{l=1}^L k_l(x_i, x_j) \geq 0 \\
-	\stackrel{\vec{\beta}\geqq 0}{\Longrightarrow}
-	\sum_{i,j=1}^n v_i v_j \sum_{l=1}^L \beta_l k_l(x_i, x_j) \geq 0
-	\stackrel{\text{Def. k}}{\Longrightarrow}
-	\sum_{i,j=1}^n v_i v_j k(x_i, x_j) \geq 0	
+	\max_\alpha \sum_i \alpha_i k(x_i,x_i) - \sum_i\sum_j\alpha_i\alpha_j k(x_i,x_j)
+	\quad\quad\text{s.t.} \quad\quad
+	\sum_i\alpha_i = 1
+	\quad\text{and} \quad
+	{1\over n\nu} \geq \alpha_i \geq 0
 \end{gather*}
-%We could also prove this for all pairs of datapoints $x, x'$ out of $\mathcal{X}$, but then the unfold of the 
-%definition of positive definiteness wouldn't be that lucid.
-
-\extitle{Exercise 1b}
-Let $x,x'\in \mathcal{X}$ be two arbitrary samples.
-\begin{gather*}
-	\sum_{l=1}^L \beta_l k_l(x,x') 
-	= 
-	\sum_{l=1}^L \beta_l \phi_l(x)^\top \phi_l(x') 
-	=
-	\sum_{l=1}^L (\sqrt{\beta_l} \phi_l(x)^\top) (\sqrt{\beta_l} \phi_l(x'))
-	\\
-	=
-\underbrace{
-\begin{bmatrix}
-	\sqrt{\beta_1} \phi_1(x)^\top	& \dots	& \sqrt{\beta_L} \phi_L(x)^\top      
-\end{bmatrix}
-}_{\phi(x)^\top}
-\underbrace{
-\begin{bmatrix}
-	\sqrt{\beta_1} \phi_1(x')	\\
-	\dots	\\
-	\sqrt{\beta_L} \phi_L(x')      
-\end{bmatrix}
-}_{\phi(x')}
-\end{gather*}
-$\phi(x)^\top$ and $\phi(x')$ are block partitioned matrices, 
-i.e. the $\phi_l's$ are simply concatenated 
-together in one very long vector. So, the result is: 
-\begin{gather*}
-	\phi(x) = 
-	\begin{bmatrix}
-		\sqrt{\beta_1} \phi_1(x)	\\
-		\dots	\\
-		\sqrt{\beta_L} \phi_L(x)      
-	\end{bmatrix}
-\end{gather*}
-\newpage 
-\extitle{Exercise 2a}
-We also encode the classes via the canonical base vectors 
-$\e_y$ for all $y\in \{1,\ldots,C\}$.
-For arbitrary n let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
-and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
-\begin{gather*}
-	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \mathbbm{1}_{[y_i=y_j]}
-	=
-	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \e^\top_{y_i} \e_{y_j} 
-	\\
-	%=
-	%\sum_{i,j=1}^n v_i v_j \sum_k a_{ik}a_{jk} \e_y^\top \e_{y'}
-	=
-	\sum_{i,j} v_i v_j \phi(x_i)^\top \phi(x_j) \e^\top_{y_i} \e_{y_j}
-	=
-	\sum_{i,j} v_i v_j \sum_{k} \phi(x_i)_k \phi(x_j)_k \sum_{l}(\e_{y_i})_l (\e_{y_j})_l
-	\\
-	=
-	\sum_{k,l} \sum_{i,j} v_i v_j \phi(x_i)_k \phi(x_j)_k (\e_{y_i})_l (\e_{y_j})_l
-	=
-	\sum_{k,l} \underbrace{(\sum_{i} v_i \phi(x_i)_k (\e_{y_i})_l  ) (\sum_{j}v_j \phi(x_j)_k (\e_{y_j})_l  )}_{\text{sums are equal}} 
-	\\
-	=
-	\sum_{k,l} \underbrace{(\sum_{i} v_i \phi(x_i)_k (\e_{y_i})_l  )^2}_{\geq 0} 
-	\geq 0
-\end{gather*}
-
-\extitle{Exercise 2b}
-We also encode the classes via the canonical base vectors 
-$\e_y$ for all $y\in \{1,\ldots,C\}$.
-\begin{gather*}
-	k(x,x')\mathbbm{1}_{[y=y']}
-	=
-	\phi(x)^\top \phi(x') \e^\top_y \e_{y'}
-	%=
-	%\e_{y}^\top (\phi(x)^\top \phi(x')) \e_{y'}
-	=
-	\sum_{i=1}^h\phi_{i}(x)\phi_{i}(x')\sum_{c=1}^C(\e_y)_c (\e_{y'})_c
-	=
-	\sum_{i=1}^h\sum_{c=1}^C\phi_{i}(x)\phi_{i}(x') (\e_y)_c (\e_{y'})_c
-	\\
-	=
-	\sum_{c=1}^C \sum_{i=1}^h \phi_{i}(x)(\e_y)_c \phi_{i}(x') (\e_{y'})_c 	
-	=
-	\hspace{2mm}
-	<
-	\underbrace{
-		\phi(x)\times \e_y 
-	}_{\phi_{\text{struct}}(x,y)}
-	,
-	\hspace{2mm}
-	\underbrace{
-	\phi(x')\times \e_{y'}
-	}_{\phi_{\text{struct}}(x',y')}
-	>_F
-\end{gather*}
-$<\cdot, \cdot>_F$ is the Frobenius inner product. If one prefers
-the standard scalar product (to see $\phi_{struct}(x)$ as a vector) 
-one could convert the matrices $\phi_{struct}$ into 
-vectors, e.g. by concatenating the row- or column vectors. Then using 
-the standard scalar product on these vectors would yield the same result. 
-  
+The primal variable c is determined by $c=\sum_i\alpha_i\phi(x_i)$.
+R, the support vectors, then can be found by using the constraint of the primal problem 
+(by finding the points on the gutter, i.e. solving $\norm{\phi(x_i)-c} = R$).
+\newpage
+\extitle{Exercise 2} 
 \end{document}
 
 
