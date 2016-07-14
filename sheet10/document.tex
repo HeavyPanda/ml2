@@ -1,0 +1,259 @@
+\documentclass[a4paper]{article}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\pagestyle{plain}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usepackage{eurosym}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{dlfltxbcodetips}
+\usepackage{cancel}
+\usepackage{bbm}
+\usepackage{graphicx}
+
+%    \usepackage{tkz-graph}  
+%    \usetikzlibrary{shapes.geometric}%   
+% 	 \usetikzlibrary{bayesnet}
+	
+\input{preamble.tex} % import config
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}  
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\vivid}{\stackrel{\text{vivid}}{=}}
+\newcommand{\icol}[1]{% inline column vector
+  \left(\begin{smallmatrix}#1\end{smallmatrix}\right)%
+}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\newcommand{\mlq}{F(\q)}
+\newcommand{\si}{s}
+\newcommand{\sj}{{s'}}
+\newcommand{\p}{p}
+\newcommand{\q}{r}
+\newcommand{\z}{w}
+\newcommand{\e}{\textbf{e}}
+%\newcommand{\x}{\mathcal{D}}
+%\newcommand{\mlq}{-L(\q)}
+%\newcommand{\si}{i}
+%\newcommand{\sj}{j}
+%\newcommand{\p}{p}
+%\newcommand{\q}{q}
+%\newcommand{\z}{Z}
+%\newcommand{\x}{X}
+
+\newcommand{\pxgz}{\p(\x|\z)}
+\newcommand{\pzgx}{\p(\z|\x)}
+\newcommand{\pxz}{\p(\x,\z)}
+\newcommand{\px}{\p(\x)}
+
+\newcommand{\qz}{\q(\z)}
+\newcommand{\qi}{\q_\si}
+\newcommand{\qj}{\q_\sj}
+\newcommand{\qk}{\q_k}
+\newcommand{\pz}{\p(\z)}
+\newcommand{\pzi}{\p(\z_\si)}
+\newcommand{\pzj}{\p(\z_\sj)}
+\newcommand{\pzk}{\p(\z_k)}
+
+\newcommand{\sigm}{\text{sigm}}
+
+\newcommand{\zi}{\z_\si}
+\newcommand{\zj}{\z_\sj}
+\newcommand{\zk}{\z_k}
+\newcommand{\dz}{\mathrm{d}\z}
+\newcommand{\dzi}{\mathrm{d}\z_\si}
+\newcommand{\dzj}{\mathrm{d}\z_\sj}
+\newcommand{\dzk}{\mathrm{d}\z_k} 
+
+\newcommand{\E}{\mathbb{E}}
+
+
+
+
+
+%\newcommand{\propq}{ \underset{ \text{wrt.}\put(1,1){\scriptsize *}q }{\propto} }
+
+\newcommand{\eqs}[1]{ \stackrel{#1}{=}  }
+\newcommand{\eqq}{  \overset{\text{!}}{=} }
+\newcommand{\propqz}{ \underset{ \overset{\text{wrt.}}{\qz} }{\propto} }
+\newcommand{\propz}{ \underset{ \overset{\text{wrt.}}{\z} }{\propto} }
+\newcommand{\propzj}{ \underset{ \overset{\text{wrt.}}{\zj} }{\propto} }
+%\newcommand{\constw}{ \underset{ \text{ wrt. \w} }{\text{ const}} }
+%\newcommand{\consty}{ \underset{ \text{ wrt. \y} }{\text{ const}} }
+\newcommand{\const}[1]{{\underset{ \text{ wrt. #1} }{\text{ const}} }}
+
+\newcommand{\tr}[1]{{#1^\top}}
+\newcommand{\inv}[1]{{#1^{-1}}}
+\newcommand{\trk}[1]{{(#1)^\top}}
+\newcommand{\invk}[1]{{(#1)^{-1}}}
+\newcommand{\tin}[1]{{(#1^\top)^{-1}}}
+
+\newcommand{\Yt}{{Y^\top}}
+\newcommand{\Xt}{{X^\top}}
+\newcommand{\xt}{{\x^\top}}
+\newcommand{\yt}{{\y^\top}}
+\newcommand{\Wt}{{\W^\top}}
+\newcommand{\w}{w}
+\newcommand{\lx}{{\lambda_{x}}}
+\newcommand{\ly}{{\lambda_{y}}}
+\newcommand{\rhi}{{r^{(i)}}}
+\newcommand{\rhj}{{r^{(j)}}}
+\newcommand{\xhi}{{x^{(i)}}}
+\newcommand{\shi}{{s^{(i)}}}
+\newcommand{\xhj}{{x^{(j)}}}
+\newcommand{\shj}{{s^{(j)}}}
+\newcommand{\Wi}{{W_{i}}}
+\newcommand{\Wj}{{W_{j}}}
+\newcommand{\Wit}{W_{i}^\top}
+\newcommand{\Wjt}{W_{j}^\top}
+\newcommand{\Wij}{W_{ij}}
+\newcommand{\Wlk}{W_{lk}}
+\newcommand{\ax}{{\alpha_{x}}}
+\newcommand{\ay}{{\alpha_{y}}}
+\newcommand{\axt}{\alpha_{x}^\top}
+\newcommand{\ayt}{\alpha_{y}^\top}
+\newcommand{\Cxx}{C_{xx}}
+\newcommand{\Cxy}{C_{xy}}
+\newcommand{\Cyx}{C_{yx}} 
+\newcommand{\Cyy}{C_{yy}}
+\newcommand{\1}{\mathds{1}}
+\newcommand{\lag}{\mathcal{L}}
+\newcommand\bigforall{\mbox{\Large $\mathsurround0pt\forall$}} 
+
+\begin{document}
+
+% header configuration
+\title{\b{Exercise Sheet 10}}
+\author{Machine Learning 2, SS16}
+
+\maketitle
+
+% authors
+Mario Tambos, 380599;\quad Viktor Jeney, 348969;\quad Sascha Huk, 321249;\quad Jan Tinapp, 0380549\\
+
+\extitle{Exercise 1a}
+For arbitrary n let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
+and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
+\begin{gather*}
+	\bigforall_{l=1}^L. \sum_{i,j=1}^n v_i v_j k_l(x_i, x_j) \geq 0 
+	\Longrightarrow
+	\sum_{l=1}^L\sum_{i,j=1}^n v_i v_j k_l(x_i, x_j) \geq 0
+	\Longrightarrow
+	\sum_{i,j=1}^n v_i v_j \sum_{l=1}^L k_l(x_i, x_j) \geq 0 \\
+	\stackrel{\vec{\beta}\geqq 0}{\Longrightarrow}
+	\sum_{i,j=1}^n v_i v_j \sum_{l=1}^L \beta_l k_l(x_i, x_j) \geq 0
+	\stackrel{\text{Def. k}}{\Longrightarrow}
+	\sum_{i,j=1}^n v_i v_j k(x_i, x_j) \geq 0	
+\end{gather*}
+%We could also prove this for all pairs of datapoints $x, x'$ out of $\mathcal{X}$, but then the unfold of the 
+%definition of positive definiteness wouldn't be that lucid.
+
+\extitle{Exercise 1b}
+Let $x,x'\in \mathcal{X}$ be two arbitrary samples.
+\begin{gather*}
+	\sum_{l=1}^L \beta_l k_l(x,x') 
+	= 
+	\sum_{l=1}^L \beta_l \phi_l(x)^\top \phi_l(x') 
+	=
+	\sum_{l=1}^L (\sqrt{\beta_l} \phi_l(x)^\top) (\sqrt{\beta_l} \phi_l(x'))
+	\\
+	=
+\underbrace{
+\begin{bmatrix}
+	\sqrt{\beta_1} \phi_1(x)^\top	& \dots	& \sqrt{\beta_L} \phi_L(x)^\top      
+\end{bmatrix}
+}_{\phi(x)^\top}
+\underbrace{
+\begin{bmatrix}
+	\sqrt{\beta_1} \phi_1(x')	\\
+	\dots	\\
+	\sqrt{\beta_L} \phi_L(x')      
+\end{bmatrix}
+}_{\phi(x')}
+\end{gather*}
+$\phi(x)^\top$ and $\phi(x')$ are block partitioned matrices, 
+i.e. the $\phi_l's$ are simply concatenated 
+together in one very long vector. So, the result is: 
+\begin{gather*}
+	\phi(x) = 
+	\begin{bmatrix}
+		\sqrt{\beta_1} \phi_1(x)	\\
+		\dots	\\
+		\sqrt{\beta_L} \phi_L(x)      
+	\end{bmatrix}
+\end{gather*}
+\newpage 
+\extitle{Exercise 2a}
+We also encode the classes via the canonical base vectors 
+$\e_y$ for all $y\in \{1,\ldots,C\}$.
+For arbitrary n let $\vec{x}_1, \ldots, \vec{x}_n \in \mathcal{X}$ be arbitrary samples 
+and $\vec{v}\in\mathbb{R}^n$ be an arbitrary vector.
+\begin{gather*}
+	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \mathbbm{1}_{[y_i=y_j]}
+	=
+	\sum_{i,j=1}^n v_i v_j k(x_i,x_j) \e^\top_{y_i} \e_{y_j} 
+	\\
+	%=
+	%\sum_{i,j=1}^n v_i v_j \sum_k a_{ik}a_{jk} \e_y^\top \e_{y'}
+	=
+	\sum_{i,j} v_i v_j \phi(x_i)^\top \phi(x_j) \e^\top_{y_i} \e_{y_j}
+	=
+	\sum_{i,j} v_i v_j \sum_{k} \phi(x_i)_k \phi(x_j)_k \sum_{l}(\e_{y_i})_l (\e_{y_j})_l
+	\\
+	=
+	\sum_{k,l} \sum_{i,j} v_i v_j \phi(x_i)_k \phi(x_j)_k (\e_{y_i})_l (\e_{y_j})_l
+	=
+	\sum_{k,l} \underbrace{(\sum_{i} v_i \phi(x_i)_k (\e_{y_i})_l  ) (\sum_{j}v_j \phi(x_j)_k (\e_{y_j})_l  )}_{\text{sums are equal}} 
+	\\
+	=
+	\sum_{k,l} \underbrace{(\sum_{i} v_i \phi(x_i)_k (\e_{y_i})_l  )^2}_{\geq 0} 
+	\geq 0
+\end{gather*}
+
+\extitle{Exercise 2b}
+We also encode the classes via the canonical base vectors 
+$\e_y$ for all $y\in \{1,\ldots,C\}$.
+\begin{gather*}
+	k(x,x')\mathbbm{1}_{[y=y']}
+	=
+	\phi(x)^\top \phi(x') \e^\top_y \e_{y'}
+	%=
+	%\e_{y}^\top (\phi(x)^\top \phi(x')) \e_{y'}
+	=
+	\sum_{i=1}^h\phi_{i}(x)\phi_{i}(x')\sum_{c=1}^C(\e_y)_c (\e_{y'})_c
+	=
+	\sum_{i=1}^h\sum_{c=1}^C\phi_{i}(x)\phi_{i}(x') (\e_y)_c (\e_{y'})_c
+	\\
+	=
+	\sum_{c=1}^C \sum_{i=1}^h \phi_{i}(x)(\e_y)_c \phi_{i}(x') (\e_{y'})_c 	
+	=
+	\hspace{2mm}
+	<
+	\underbrace{
+		\phi(x)\times \e_y 
+	}_{\phi_{\text{struct}}(x,y)}
+	,
+	\hspace{2mm}
+	\underbrace{
+	\phi(x')\times \e_{y'}
+	}_{\phi_{\text{struct}}(x',y')}
+	>_F
+\end{gather*}
+$<\cdot, \cdot>_F$ is the Frobenius inner product. If one prefers
+the standard scalar product (to see $\phi_{struct}(x)$ as a vector) 
+one could convert the matrices $\phi_{struct}$ into 
+vectors, e.g. by concatenating the row- or column vectors. Then using 
+the standard scalar product on these vectors would yield the same result. 
+  
+\end{document}
+
+
+
+
+
+
