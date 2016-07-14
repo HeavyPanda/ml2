@@ -201,7 +201,7 @@ The Lagrangian of the dual problem then can be obtained by plugging in the deriv
 	\sum_i \alpha_i k(x_i,x_i)
 	- c^\top c 
 \end{gather*}
-Lastly, by using the definition of b, we obtain the dual program:
+Lastly, by using the definition of c, we obtain the dual program:
 \begin{gather*}
 	\max_\alpha \sum_i \alpha_i k(x_i,x_i) - \sum_i\sum_j\alpha_i\alpha_j k(x_i,x_j)
 	\\
@@ -226,7 +226,31 @@ The primal variable c is determined by $c=\sum_i\alpha_i\phi(x_i)$.
 R, the support vectors, then can be found by using the constraint of the primal problem 
 (by finding the points on the gutter, i.e. solving $\norm{\phi(x_i)-c} = R$).
 \newpage
-\extitle{Exercise 2} 
+\extitle{Exercise 2}
+Form of the QP problem:
+\begin{align*}
+	\min_x {1\over 2}\xt Px + q^\top x \quad\quad & \text{s.t. }\quad Gx\preceq h
+	 \quad \text{ and }\quad Ax=b  
+\end{align*}
+The variables have been identified as follows:
+\begin{align*}
+	& x\hat{=}\alpha & \quad & P\hat{=}(K_{i,j}y_i y_j)_{i,j} & \quad & 
+	q\hat{=}-\textbf{1} & \quad & G\hat{=} -\textbf{I} \\
+	&h\hat{=}\textbf{0} & \quad & A\hat{=}y & \quad & b\hat{=}\textbf{0}
+\end{align*} 
+The objective of the dual problem can be further derived like this:
+\begin{align*}
+	\min_{w,b}\max_\alpha L(w,b,\alpha) 
+	= \min_{w,b}\max_\alpha{1\over 2}||{w}||^2 - \sum_{i=1}^n \alpha_i(y_i(wx_i+b)-1) \\ 
+	\Longrightarrow
+	\max_{\alpha >\textbf{0}} L(\alpha) = \max_{\alpha >\textbf{0}} \sum_{i=1}^n \alpha_i - {1\over 2}\sum_{i=1}^n \sum_{j=1}^n \alpha_i \alpha_j y_i y_j
+	K_{i,j} \quad \text{s.t. } \quad \sum_i \alpha_i y_i = 0
+	\\
+	\Longrightarrow
+	\min_{\alpha >\textbf{0}} -L(\alpha) = \min_{\alpha >\textbf{0}} {1\over 2}\sum_{i=1}^n \sum_{j=1}^n \alpha_i \alpha_j y_i y_j K_{i,j} - \sum_{i=1}^n \alpha_i
+	\quad \text{s.t. } \quad \sum_i \alpha_i y_i = 0  
+\end{align*} 
+It is now easy to match the pattern of the QP problem.
 \end{document}
 
 
