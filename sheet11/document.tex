@@ -252,29 +252,29 @@ The objective of the dual problem can be further derived like this:
 \end{gather*}
 The variables can now be identified as follows:
 \begin{align*}
-	& P\hat{=}(K(x_i,x_j))_{i,j} & \quad & 
-	q\hat{=}-(K(x_i,x_i))_{i} & \quad & 
+	& P\hat{=}(k(x_i,x_j))_{i,j}\in\mathbb{R}^{n\times n} & \quad & 
+	q\hat{=}-(k(x_i,x_i))_{i}\in\mathbb{R}^{n} & \quad & 
 	G\hat{=} 
 	\begin{bmatrix}
 		\textbf{I}_n \\ 
 		\textbf{-I}_n 
-	\end{bmatrix}
+	\end{bmatrix}\in\mathbb{R}^{2n\times n}
 	\\
 	&h\hat{=}{1\over n\nu}
 	\begin{bmatrix}
 		\mathbbm{\vec{1}}_n \\ 
 		\vec{0}_n 
-	\end{bmatrix}	
+	\end{bmatrix}\in\mathbb{R}^{2n}
 	& \quad & A\hat{=}
 	\begin{bmatrix}
 		1 & \ldots & 1 \\ 
 		\phi(x_1) & \ldots & \phi(x_n)  
-	\end{bmatrix}
+	\end{bmatrix}\in\mathbb{R}^{(d+1)\times n}
 	& \quad & b\hat{=}
 	\begin{bmatrix}
 		1 \\ 
 		\vec{c} 
-	\end{bmatrix}
+	\end{bmatrix}\in\mathbb{R}^{d+1}
 \end{align*} 
 \end{document}
 
